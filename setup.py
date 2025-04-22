@@ -1,0 +1,77 @@
+from setuptools import setup, find_packages
+
+setup(
+    name="secauditai",
+    version="0.1.0",
+    packages=find_packages(),
+    install_requires=[
+        # Core dependencies
+        "click>=8.0.0",
+        "pyyaml>=6.0",
+        "rich>=10.0.0",
+        "inquirer>=3.0.0",
+        "pydantic>=2.0.0",
+        "python-dotenv>=0.19.0",
+        "tqdm>=4.65.0",
+        
+        # Cloud providers
+        "boto3>=1.26.0",
+        "azure-identity>=1.12.0",
+        "azure-mgmt-resource>=22.0.0",
+        "google-cloud-storage>=2.0.0",
+        "kubernetes>=24.0.0",
+        
+        # AI and ML
+        "ollama>=0.1.0",
+        "transformers>=4.30.0",
+        "torch>=2.0.0",
+        "scikit-learn>=1.0.0",
+        "pandas>=1.5.0",
+        
+        # Code analysis
+        "tree-sitter>=0.20.0",
+        "tree-sitter-python>=0.20.0",
+        "tree-sitter-javascript>=0.20.0",
+        "tree-sitter-java>=0.20.0",
+        "tree-sitter-go>=0.20.0",
+        
+        # SBOM and vulnerability scanning
+        "syft>=0.60.0",
+        "grype>=0.60.0",
+        
+        # Report generation
+        "jinja2>=3.0.0",
+        "pdfkit>=1.0.0",
+        "wkhtmltopdf>=0.12.6",
+        
+        # Testing and development
+        "pytest>=7.0.0",
+        "pytest-cov>=4.0.0",
+        "black>=23.0.0",
+        "flake8>=6.0.0",
+        "mypy>=1.0.0",
+    ],
+    entry_points={
+        "console_scripts": [
+            "secauditai=secauditai.cli:main",
+        ],
+    },
+    author="Your Name",
+    author_email="your.email@example.com",
+    description="AI-powered security audit tool for code, cloud, and infrastructure",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
+    url="https://github.com/yourusername/secauditai",
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "Intended Audience :: System Administrators",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+    ],
+    python_requires=">=3.8",
+) 
