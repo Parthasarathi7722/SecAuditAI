@@ -9,6 +9,7 @@ from typing import Dict, Any, Optional
 from pathlib import Path
 from datetime import datetime
 import schedule
+import requests
 from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress
@@ -123,6 +124,51 @@ class Monitor:
         self.logger.info("Email alert would be sent here")
 
     def _send_slack_alert(self, message: str) -> None:
-        """Send Slack alert."""
-        # TODO: Implement Slack webhook
-        self.logger.info("Slack alert would be sent here") 
+        """Send Slack alert using webhook."""
+        try:
+            webhook_url = self.notifications['slack_webhook']
+            
+            # Format Slack message
+            slack_message = {
+                "blocks": [
+                    {
+                        "type": "header",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "🔔 SecAuditAI Alert",
+                            "emoji": True
+                        }
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": message
+                        }
+                    },
+                    {
+                        "type": "context",
+                        "elements": [
+                            {
+                                "type": "mrkdwn",
+                                "text": f"Alert generated at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+                            }
+                        ]
+                    }
+                ]
+            }
+            
+            # Send request to Slack webhook
+            response = requests.post(
+                webhook_url,
+                json=slack_message,
+                headers={'Content-Type': 'application/json'}
+            )
+            
+            if response.status_code != 200:
+                self.logger.error(f"Failed to send Slack alert: {response.text}")
+            else:
+                self.logger.info("Slack alert sent successfully")
+                
+        except Exception as e:
+            self.logger.error(f"Error sending Slack alert: {str(e)}") 
