@@ -8,6 +8,7 @@ python-dotenv>=0.19.0
 tqdm>=4.65.0
 requests>=2.31.0
 typing-extensions>=4.5.0
+schedule>=1.2.0
 
 # Cloud providers
 boto3>=1.26.0

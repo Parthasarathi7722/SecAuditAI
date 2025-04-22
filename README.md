@@ -10,6 +10,8 @@ A powerful CLI security audit tool that combines AI-powered code analysis, cloud
 - **CIS Benchmark Checks**: Automated compliance checking against CIS benchmarks
 - **Modular Plugin Architecture**: Extensible design for adding new scanners and analyzers
 - **Comprehensive Reporting**: Generate detailed reports in multiple formats (JSON, HTML, PDF)
+- **Real-time Analysis**: Immediate feedback and continuous monitoring capabilities
+- **Customizable AI Models**: Train and fine-tune models for specific security needs
 
 ## Installation
 
@@ -69,17 +71,46 @@ secauditai scan /path/to/project --type sbom
 secauditai scan aws --type cis
 ```
 
+5. Real-time monitoring:
+```bash
+secauditai monitor /path/to/repo --interval 300
+```
+
 ### Report Generation
 ```bash
 secauditai report list
 secauditai report show <report_id>
 ```
 
+## AI Model Training
+
+For detailed information on training and fine-tuning LLMs for vulnerability detection, see the [LLM Training Guide](docs/llm_training.md).
+
+Key features:
+- Support for multiple datasets (CodeXGLUE, Big-Vul, Devign, SARD)
+- Custom dataset conversion tools
+- Fine-tuning capabilities
+- Performance evaluation metrics
+
 ## Configuration
 
 Configuration is stored in `~/.secauditai/config.json`. You can modify settings using:
 ```bash
 secauditai config set <key> <value>
+```
+
+### Real-time Configuration
+```json
+{
+  "monitoring": {
+    "interval": 300,
+    "alert_threshold": "high",
+    "notifications": {
+      "email": "your-email@example.com",
+      "slack_webhook": "your-webhook-url"
+    }
+  }
+}
 ```
 
 ## Development
