@@ -137,21 +137,18 @@ pytest
 
 ## Roadmap
 
-### Short-term Goals (Next 3 months)
 - [ ] Implement email notification system
 - [ ] Add support for more cloud providers (Alibaba Cloud, Oracle Cloud)
 - [ ] Enhance SBOM analysis with dependency graph visualization
 - [ ] Add support for more programming languages in code analysis
 - [ ] Implement automated fix suggestions for detected vulnerabilities
 
-### Medium-term Goals (3-6 months)
 - [ ] Develop a web dashboard for monitoring and reporting
 - [ ] Add support for container security scanning
 - [ ] Implement CI/CD pipeline integration
 - [ ] Add support for custom security rules and policies
 - [ ] Develop a plugin marketplace for community contributions
 
-### Long-term Goals (6+ months)
 - [ ] Implement advanced AI models for zero-day vulnerability detection
 - [ ] Add support for compliance frameworks (SOC2, ISO 27001, etc.)
 - [ ] Develop a threat intelligence integration system
