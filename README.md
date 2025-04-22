@@ -4,156 +4,188 @@ A powerful CLI security audit tool that combines AI-powered code analysis, cloud
 
 ## Features
 
-- **AI-Powered Code Analysis**: Detect security vulnerabilities in source code using advanced LLM models
-- **Cloud Infrastructure Scanning**: Support for multiple cloud platforms (AWS, Azure, GCP)
-- **SBOM Vulnerability Detection**: Analyze software dependencies for known vulnerabilities
-- **CIS Benchmark Checks**: Automated compliance checking against CIS benchmarks
-- **Modular Plugin Architecture**: Extensible design for adding new scanners and analyzers
-- **Comprehensive Reporting**: Generate detailed reports in multiple formats (JSON, HTML, PDF)
-- **Real-time Analysis**: Immediate feedback and continuous monitoring capabilities
-- **Customizable AI Models**: Train and fine-tune models for specific security needs
+### AI-Powered Code Analysis
+Detect security vulnerabilities in source code using advanced LLM models
+- **Powered by**:
+  - CodeBERT (Microsoft Research) for semantic code analysis
+  - Tree-sitter for language parsing
+  - PyTorch for model training and inference
+  - Transformers library for LLM integration
+  - Custom-trained models on CodeXGLUE and Big-Vul datasets
 
-### Experimental Features
-- **Zero-Day Vulnerability Detection**: Advanced AI models for detecting unknown vulnerabilities
-  - Semantic code analysis using CodeBERT
-  - Anomaly detection with Isolation Forest
-  - Behavior pattern analysis
-  - Combined scoring system for vulnerability assessment
-  - Note: This feature is experimental and may produce false positives
+### Cloud Infrastructure Scanning
+Support for multiple cloud platforms (AWS, Azure, GCP)
+- **Powered by**:
+  - AWS SDK (boto3) for AWS scanning
+  - Azure SDK for Azure scanning
+  - Google Cloud SDK for GCP scanning
+  - Cloud Custodian for policy enforcement
+  - Scout Suite for cloud security assessment
+
+### SBOM Vulnerability Detection
+Analyze software dependencies for known vulnerabilities
+- **Powered by**:
+  - Syft for SBOM generation
+  - Grype for vulnerability scanning
+  - OWASP Dependency-Check
+  - Snyk Open Source
+  - National Vulnerability Database (NVD) API
+
+### CIS Benchmark Checks
+Automated compliance checking against CIS benchmarks
+- **Powered by**:
+  - CIS-CAT Pro Assessor
+  - OpenSCAP
+  - Inspec for compliance testing
+  - AWS Config Rules
+  - Azure Policy
+
+### Modular Plugin Architecture
+Extensible design for adding new scanners and analyzers
+- **Powered by**:
+  - Python's importlib for dynamic plugin loading
+  - Click framework for CLI interface
+  - Pydantic for configuration management
+  - PyYAML for plugin configuration
+
+### Comprehensive Reporting
+Generate detailed reports in multiple formats (JSON, HTML, PDF)
+- **Powered by**:
+  - Jinja2 for HTML template rendering
+  - WeasyPrint for PDF generation
+  - Pandas for data analysis
+  - Plotly for visualization
+  - Custom report templates
+
+### Real-time Analysis
+Immediate feedback and continuous monitoring capabilities
+- **Powered by**:
+  - Watchdog for file system monitoring
+  - Slack API for notifications
+  - SMTP for email alerts
+  - Redis for caching
+  - Prometheus for metrics collection
+
+### Customizable AI Models
+Train and fine-tune models for specific security needs
+- **Powered by**:
+  - Hugging Face Transformers
+  - PyTorch Lightning
+  - Scikit-learn
+  - TensorFlow
+  - Custom training pipelines
 
 ## Supported Languages and Frameworks
 
 ### Code Analysis
 - **Languages**:
-  - Python
-  - JavaScript/TypeScript
-  - Java
-  - C/C++
-  - Go
-  - Ruby
-  - PHP
-  - Rust
-  - Swift
-  - Kotlin
+  - Python (using ast and tokenize)
+  - JavaScript/TypeScript (using Esprima)
+  - Java (using JavaParser)
+  - C/C++ (using Clang)
+  - Go (using go/parser)
+  - Ruby (using parser)
+  - PHP (using PHP-Parser)
+  - Rust (using syn)
+  - Swift (using SwiftSyntax)
+  - Kotlin (using Kotlin Parser)
 
 - **Frameworks**:
-  - Django
-  - Flask
-  - Express.js
-  - Spring Boot
-  - React
-  - Vue.js
-  - Laravel
-  - Ruby on Rails
-  - FastAPI
+  - Django (using django-inspector)
+  - Flask (using flask-inspector)
+  - Express.js (using express-validator)
+  - Spring Boot (using spring-security)
+  - React (using eslint-plugin-react)
+  - Vue.js (using vue-eslint-parser)
+  - Laravel (using laravel-security)
+  - Ruby on Rails (using brakeman)
+  - FastAPI (using fastapi-security)
 
 ### Container Image Analysis
 - **Base Images**:
-  - Alpine
-  - Ubuntu
-  - Debian
-  - CentOS
-  - Red Hat Enterprise Linux
-  - Amazon Linux
+  - Alpine (using apk-tools)
+  - Ubuntu (using dpkg)
+  - Debian (using dpkg)
+  - CentOS (using rpm)
+  - Red Hat Enterprise Linux (using rpm)
+  - Amazon Linux (using rpm)
 
 - **Container Runtimes**:
-  - Docker
-  - containerd
-  - CRI-O
+  - Docker (using Docker SDK)
+  - containerd (using containerd API)
+  - CRI-O (using CRI-O API)
 
-## Vulnerability Detection
+## Open Source Credits
 
-### Code Security Analysis
-SecAuditAI performs comprehensive code analysis to detect various security vulnerabilities:
+We would like to acknowledge and thank the following open-source projects that power SecAuditAI:
 
-1. **Authentication & Authorization Issues**:
-   - Broken Access Control
-   - Insecure Direct Object References (IDOR)
-   - Missing Authentication
-   - Session Management Issues
-   - JWT Implementation Flaws
+### Core Dependencies
+- **Python**: The foundation of our tool
+- **Click**: CLI framework
+- **Pydantic**: Data validation
+- **PyYAML**: Configuration management
+- **Jinja2**: Template engine
+- **WeasyPrint**: PDF generation
+- **Pandas**: Data analysis
+- **Plotly**: Visualization
+- **Watchdog**: File monitoring
+- **Redis**: Caching
+- **Prometheus**: Metrics
 
-2. **Injection Vulnerabilities**:
-   - SQL Injection
-   - NoSQL Injection
-   - Command Injection
-   - LDAP Injection
-   - XPath Injection
+### Security Tools
+- **CodeBERT**: Microsoft Research's code understanding model
+- **Tree-sitter**: Language parsing
+- **Syft**: SBOM generation
+- **Grype**: Vulnerability scanning
+- **OWASP Dependency-Check**: Dependency analysis
+- **OpenSCAP**: Security compliance
+- **Inspec**: Compliance testing
+- **Cloud Custodian**: Cloud security
+- **Scout Suite**: Cloud security assessment
 
-3. **Cross-Site Scripting (XSS)**:
-   - Stored XSS
-   - Reflected XSS
-   - DOM-based XSS
-   - Content Security Policy (CSP) Issues
+### AI/ML Libraries
+- **PyTorch**: Deep learning framework
+- **Transformers**: Hugging Face's NLP library
+- **Scikit-learn**: Machine learning
+- **TensorFlow**: Deep learning framework
+- **Lightning**: PyTorch training framework
 
-4. **Data Security Issues**:
-   - Sensitive Data Exposure
-   - Insecure Deserialization
-   - XML External Entities (XXE)
-   - Insecure File Uploads
+### Cloud SDKs
+- **boto3**: AWS SDK
+- **Azure SDK**: Microsoft Azure
+- **Google Cloud SDK**: GCP
+- **AWS Config**: AWS compliance
+- **Azure Policy**: Azure compliance
 
-5. **Security Misconfigurations**:
-   - Default Credentials
-   - Debug Features Enabled
-   - Directory Listing
-   - Unnecessary Services
-   - Insecure Headers
+### Language Parsers
+- **Esprima**: JavaScript parsing
+- **JavaParser**: Java parsing
+- **Clang**: C/C++ parsing
+- **go/parser**: Go parsing
+- **parser**: Ruby parsing
+- **PHP-Parser**: PHP parsing
+- **syn**: Rust parsing
+- **SwiftSyntax**: Swift parsing
+- **Kotlin Parser**: Kotlin parsing
 
-### SBOM Analysis and Vulnerability Matching
+### Framework Tools
+- **django-inspector**: Django analysis
+- **flask-inspector**: Flask analysis
+- **express-validator**: Express.js validation
+- **spring-security**: Spring Boot security
+- **eslint-plugin-react**: React analysis
+- **vue-eslint-parser**: Vue.js analysis
+- **laravel-security**: Laravel security
+- **brakeman**: Rails security
+- **fastapi-security**: FastAPI security
 
-SecAuditAI performs comprehensive SBOM analysis with the following capabilities:
-
-1. **Dependency Analysis**:
-   - Package Name and Version Detection
-   - Direct and Transitive Dependencies
-   - License Analysis
-   - Dependency Tree Visualization
-
-2. **Vulnerability Database Integration**:
-   - National Vulnerability Database (NVD)
-   - GitHub Security Advisories
-   - OSV Database
-   - Snyk Vulnerability Database
-   - OSS Index
-
-3. **Vulnerability Matching Process**:
-   - CVE ID Matching
-   - Version Range Analysis
-   - Severity Scoring (CVSS)
-   - Exploit Availability Check
-   - Patch Availability Verification
-
-4. **Advanced Analysis**:
-   - Dependency Confusion Detection
-   - Supply Chain Attack Prevention
-   - Malicious Package Detection
-   - Outdated Dependency Analysis
-   - License Compliance Checking
-
-### AI-Powered Analysis
-
-SecAuditAI uses advanced AI models for vulnerability detection:
-
-1. **Static Analysis**:
-   - Pattern Recognition
-   - Code Flow Analysis
-   - Data Flow Analysis
-   - Control Flow Analysis
-   - Taint Analysis
-
-2. **Semantic Analysis**:
-   - Context-Aware Vulnerability Detection
-   - False Positive Reduction
-   - Custom Rule Learning
-   - Code Understanding
-   - Security Pattern Recognition
-
-3. **Training Data Sources**:
-   - CodeXGLUE Dataset
-   - Big-Vul Dataset
-   - Devign Dataset
-   - SARD Dataset
-   - Custom Training Data
+### Container Tools
+- **Docker SDK**: Docker integration
+- **containerd API**: Container runtime
+- **CRI-O API**: Container runtime
+- **apk-tools**: Alpine package management
+- **dpkg**: Debian package management
+- **rpm**: RPM package management
 
 ## Installation
 
@@ -303,8 +335,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- CodeXGLUE dataset
-- Big-Vul dataset
-- Devign dataset
-- SARD dataset
-- Ollama for LLM integration
+We extend our deepest gratitude to all the open-source projects and communities that have made SecAuditAI possible. Your contributions to the security and development communities are invaluable.
+
+Special thanks to:
+- Microsoft Research for CodeBERT
+- OWASP for their security tools and guidelines
+- The Python community for their excellent libraries
+- The cloud providers for their SDKs and APIs
+- All the maintainers of the open-source projects we depend on
