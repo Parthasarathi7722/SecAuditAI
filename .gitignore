@@ -22,8 +22,8 @@ wheels/
 
 # Virtual Environment
 venv/
-env/
 ENV/
+env/
 
 # IDE
 .idea/
@@ -31,22 +31,31 @@ ENV/
 *.swp
 *.swo
 
-# Project specific
-.secauditai/
+# Logs
 *.log
-*.pdf
-*.html
-*.json
+logs/
 
-# Testing
+# Local configuration
+*.env
+.env
+config.json
+
+# Cache
+.cache/
+.pytest_cache/
 .coverage
 htmlcov/
-.pytest_cache/
-.tox/
 
 # Distribution
-*.tar.gz
-*.zip
+dist/
+build/
+
+# Database
+*.db
+*.sqlite3
+
+# Jupyter Notebook
+.ipynb_checkpoints
 
 # OS specific
 .DS_Store

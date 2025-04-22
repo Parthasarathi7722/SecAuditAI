@@ -5,6 +5,9 @@ import os
 from typing import Dict, Any, List
 from pathlib import Path
 import syft
+import requests
+import json
+from datetime import datetime, timedelta
 from .. import ScannerPlugin
 
 class SBOMScanner(ScannerPlugin):
@@ -12,6 +15,9 @@ class SBOMScanner(ScannerPlugin):
     
     def __init__(self):
         self.checks = self._load_checks()
+        self.nvd_api_key = os.getenv('NVD_API_KEY')
+        self.cache_dir = os.path.expanduser('~/.secauditai/cache/nvd')
+        os.makedirs(self.cache_dir, exist_ok=True)
 
     def _load_checks(self) -> List[Dict[str, Any]]:
         """Load SBOM security checks."""
@@ -36,6 +42,52 @@ class SBOMScanner(ScannerPlugin):
             }
         ]
 
+    def _fetch_nvd_data(self, cve_id: str) -> Dict[str, Any]:
+        """Fetch CVE data from NVD."""
+        cache_file = os.path.join(self.cache_dir, f"{cve_id}.json")
+        
+        # Check cache first
+        if os.path.exists(cache_file):
+            with open(cache_file, 'r') as f:
+                return json.load(f)
+        
+        # Fetch from NVD API
+        headers = {}
+        if self.nvd_api_key:
+            headers['apiKey'] = self.nvd_api_key
+        
+        url = f"https://services.nvd.nist.gov/rest/json/cve/1.0/{cve_id}"
+        response = requests.get(url, headers=headers)
+        
+        if response.status_code == 200:
+            data = response.json()
+            with open(cache_file, 'w') as f:
+                json.dump(data, f)
+            return data
+        return {}
+
+    def _fetch_latest_version(self, package_name: str, package_manager: str) -> str:
+        """Fetch latest version of a package from its package manager."""
+        try:
+            if package_manager == 'npm':
+                url = f"https://registry.npmjs.org/{package_name}/latest"
+                response = requests.get(url)
+                if response.status_code == 200:
+                    return response.json()['version']
+            elif package_manager == 'pypi':
+                url = f"https://pypi.org/pypi/{package_name}/json"
+                response = requests.get(url)
+                if response.status_code == 200:
+                    return response.json()['info']['version']
+            elif package_manager == 'maven':
+                url = f"https://search.maven.org/solrsearch/select?q=g:{package_name}&rows=1&wt=json"
+                response = requests.get(url)
+                if response.status_code == 200:
+                    return response.json()['response']['docs'][0]['latestVersion']
+        except Exception:
+            pass
+        return "unknown"
+
     def _generate_sbom(self, path: str) -> Dict[str, Any]:
         """Generate SBOM for the target."""
         try:
@@ -52,19 +104,24 @@ class SBOMScanner(ScannerPlugin):
         """Check for known vulnerabilities."""
         findings = []
         
-        # TODO: Integrate with vulnerability databases
-        # This is a placeholder implementation
         for package in sbom.get('artifacts', []):
-            if package.get('vulnerabilities'):
-                for vuln in package['vulnerabilities']:
-                    findings.append({
-                        "check_id": "sbom-001",
-                        "resource": f"{package['name']}@{package['version']}",
-                        "status": "failed",
-                        "message": f"Known vulnerability: {vuln['id']} - {vuln['description']}",
-                        "severity": vuln.get('severity', 'high'),
-                        "recommendation": f"Update to version {vuln.get('fixed_version', 'latest')}"
-                    })
+            # Check NVD for vulnerabilities
+            if package.get('cpe'):
+                nvd_data = self._fetch_nvd_data(package['cpe'])
+                if nvd_data and 'result' in nvd_data:
+                    for vuln in nvd_data['result']['CVE_Items']:
+                        cve_id = vuln['cve']['CVE_data_meta']['ID']
+                        severity = vuln['impact'].get('baseMetricV3', {}).get('cvssV3', {}).get('baseSeverity', 'unknown')
+                        
+                        findings.append({
+                            "check_id": "sbom-001",
+                            "resource": f"{package['name']}@{package['version']}",
+                            "status": "failed",
+                            "message": f"Known vulnerability: {cve_id} - {vuln['cve']['description']['description_data'][0]['value']}",
+                            "severity": severity.lower(),
+                            "recommendation": f"Update to version {vuln.get('fixed_version', 'latest')}",
+                            "cve_data": vuln
+                        })
         
         return findings
 
@@ -72,17 +129,18 @@ class SBOMScanner(ScannerPlugin):
         """Check for outdated dependencies."""
         findings = []
         
-        # TODO: Implement version checking against latest versions
-        # This is a placeholder implementation
         for package in sbom.get('artifacts', []):
-            if package.get('latest_version') and package['version'] != package['latest_version']:
+            package_manager = package.get('type', '').lower()
+            latest_version = self._fetch_latest_version(package['name'], package_manager)
+            
+            if latest_version != "unknown" and package['version'] != latest_version:
                 findings.append({
                     "check_id": "sbom-002",
                     "resource": f"{package['name']}@{package['version']}",
                     "status": "failed",
-                    "message": f"Outdated dependency: Current version {package['version']}, Latest version {package['latest_version']}",
+                    "message": f"Outdated dependency: Current version {package['version']}, Latest version {latest_version}",
                     "severity": "medium",
-                    "recommendation": f"Update to version {package['latest_version']}"
+                    "recommendation": f"Update to version {latest_version}"
                 })
         
         return findings

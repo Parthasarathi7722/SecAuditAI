@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecAuditAI Report - {{ scan_type }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .summary {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .findings {
+            margin-top: 20px;
+        }
+        .finding {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .finding.failed {
+            border-left: 4px solid #dc3545;
+        }
+        .finding.passed {
+            border-left: 4px solid #28a745;
+        }
+        .finding.error {
+            border-left: 4px solid #ffc107;
+        }
+        .severity {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .severity.high {
+            background-color: #dc3545;
+            color: white;
+        }
+        .severity.medium {
+            background-color: #ffc107;
+            color: black;
+        }
+        .severity.low {
+            background-color: #28a745;
+            color: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        .timestamp {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SecAuditAI Security Report</h1>
+        <p class="timestamp">Generated on {{ timestamp }}</p>
+    </div>
+
+    <div class="summary">
+        <h2>Scan Summary</h2>
+        <p>Scan Type: {{ scan_type }}</p>
+        <p>Total Findings: {{ results.summary.total }}</p>
+        <p>Failed: {{ results.summary.failed }}</p>
+        <p>Passed: {{ results.summary.passed }}</p>
+        <p>Errors: {{ results.summary.error }}</p>
+    </div>
+
+    <div class="findings">
+        <h2>Detailed Findings</h2>
+        {% for finding in results.findings %}
+        <div class="finding {{ finding.status }}">
+            <h3>
+                <span class="severity {{ finding.severity|default('medium') }}">
+                    {{ finding.severity|default('medium')|title }}
+                </span>
+                {{ finding.resource }}
+            </h3>
+            <p><strong>Status:</strong> {{ finding.status|title }}</p>
+            <p><strong>Message:</strong> {{ finding.message }}</p>
+            {% if finding.recommendation %}
+            <p><strong>Recommendation:</strong> {{ finding.recommendation }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="metadata">
+        <h2>Scan Metadata</h2>
+        <table>
+            <tr>
+                <th>Scanner</th>
+                <td>{{ results.scanner }}</td>
+            </tr>
+            <tr>
+                <th>Target</th>
+                <td>{{ results.target }}</td>
+            </tr>
+            <tr>
+                <th>Duration</th>
+                <td>{{ results.duration|default('N/A') }}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html> 
