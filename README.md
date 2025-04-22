@@ -15,7 +15,7 @@ A powerful CLI security audit tool that combines AI-powered code analysis, cloud
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/SecAuditAI.git
+git clone https://github.com/Parthasarathi7722/SecAuditAI.git
 cd SecAuditAI
 ```
 
