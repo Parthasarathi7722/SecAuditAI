@@ -9,16 +9,11 @@ Detect security vulnerabilities in source code using advanced LLM models
 - **Powered by**:
   - CodeBERT (Microsoft Research) for semantic code analysis
   - Tree-sitter for language parsing
-  - PyTorch for model training and inference
-  - Transformers library for LLM integration
   - Custom-trained models on CodeXGLUE and Big-Vul datasets
 
 ### Cloud Infrastructure Scanning
 Support for multiple cloud platforms (AWS, Azure, GCP)
 - **Powered by**:
-  - AWS SDK (boto3) for AWS scanning
-  - Azure SDK for Azure scanning
-  - Google Cloud SDK for GCP scanning
   - Cloud Custodian for policy enforcement
   - Scout Suite for cloud security assessment
 
@@ -28,43 +23,30 @@ Analyze software dependencies for known vulnerabilities
   - Syft for SBOM generation
   - Grype for vulnerability scanning
   - OWASP Dependency-Check
-  - Snyk Open Source
-  - National Vulnerability Database (NVD) API
 
 ### CIS Benchmark Checks
 Automated compliance checking against CIS benchmarks
 - **Powered by**:
-  - CIS-CAT Pro Assessor
   - OpenSCAP
   - Inspec for compliance testing
-  - AWS Config Rules
-  - Azure Policy
 
 ### Modular Plugin Architecture
 Extensible design for adding new scanners and analyzers
 - **Powered by**:
-  - Python's importlib for dynamic plugin loading
   - Click framework for CLI interface
   - Pydantic for configuration management
-  - PyYAML for plugin configuration
 
 ### Comprehensive Reporting
 Generate detailed reports in multiple formats (JSON, HTML, PDF)
 - **Powered by**:
   - Jinja2 for HTML template rendering
   - WeasyPrint for PDF generation
-  - Pandas for data analysis
-  - Plotly for visualization
-  - Custom report templates
 
 ### Real-time Analysis
 Immediate feedback and continuous monitoring capabilities
 - **Powered by**:
   - Watchdog for file system monitoring
   - Slack API for notifications
-  - SMTP for email alerts
-  - Redis for caching
-  - Prometheus for metrics collection
 
 ### Customizable AI Models
 Train and fine-tune models for specific security needs
@@ -72,8 +54,100 @@ Train and fine-tune models for specific security needs
   - Hugging Face Transformers
   - PyTorch Lightning
   - Scikit-learn
-  - TensorFlow
-  - Custom training pipelines
+
+## Vulnerability Detection
+
+### Code Security Analysis
+SecAuditAI performs comprehensive code analysis to detect various security vulnerabilities:
+
+1. **Authentication & Authorization Issues**:
+   - Broken Access Control
+   - Insecure Direct Object References (IDOR)
+   - Missing Authentication
+   - Session Management Issues
+   - JWT Implementation Flaws
+
+2. **Injection Vulnerabilities**:
+   - SQL Injection
+   - NoSQL Injection
+   - Command Injection
+   - LDAP Injection
+   - XPath Injection
+
+3. **Cross-Site Scripting (XSS)**:
+   - Stored XSS
+   - Reflected XSS
+   - DOM-based XSS
+   - Content Security Policy (CSP) Issues
+
+4. **Data Security Issues**:
+   - Sensitive Data Exposure
+   - Insecure Deserialization
+   - XML External Entities (XXE)
+   - Insecure File Uploads
+
+5. **Security Misconfigurations**:
+   - Default Credentials
+   - Debug Features Enabled
+   - Directory Listing
+   - Unnecessary Services
+   - Insecure Headers
+
+### SBOM Analysis and Vulnerability Matching
+
+SecAuditAI performs comprehensive SBOM analysis with the following capabilities:
+
+1. **Dependency Analysis**:
+   - Package Name and Version Detection
+   - Direct and Transitive Dependencies
+   - License Analysis
+   - Dependency Tree Visualization
+
+2. **Vulnerability Database Integration**:
+   - National Vulnerability Database (NVD)
+   - GitHub Security Advisories
+   - OSV Database
+   - Snyk Vulnerability Database
+   - OSS Index
+
+3. **Vulnerability Matching Process**:
+   - CVE ID Matching
+   - Version Range Analysis
+   - Severity Scoring (CVSS)
+   - Exploit Availability Check
+   - Patch Availability Verification
+
+4. **Advanced Analysis**:
+   - Dependency Confusion Detection
+   - Supply Chain Attack Prevention
+   - Malicious Package Detection
+   - Outdated Dependency Analysis
+   - License Compliance Checking
+
+### AI-Powered Analysis
+
+SecAuditAI uses advanced AI models for vulnerability detection:
+
+1. **Static Analysis**:
+   - Pattern Recognition
+   - Code Flow Analysis
+   - Data Flow Analysis
+   - Control Flow Analysis
+   - Taint Analysis
+
+2. **Semantic Analysis**:
+   - Context-Aware Vulnerability Detection
+   - False Positive Reduction
+   - Custom Rule Learning
+   - Code Understanding
+   - Security Pattern Recognition
+
+3. **Training Data Sources**:
+   - CodeXGLUE Dataset
+   - Big-Vul Dataset
+   - Devign Dataset
+   - SARD Dataset
+   - Custom Training Data
 
 ## Supported Languages and Frameworks
 
@@ -117,20 +191,7 @@ Train and fine-tune models for specific security needs
 
 ## Open Source Credits
 
-We would like to acknowledge and thank the following open-source projects that power SecAuditAI:
-
-### Core Dependencies
-- **Python**: The foundation of our tool
-- **Click**: CLI framework
-- **Pydantic**: Data validation
-- **PyYAML**: Configuration management
-- **Jinja2**: Template engine
-- **WeasyPrint**: PDF generation
-- **Pandas**: Data analysis
-- **Plotly**: Visualization
-- **Watchdog**: File monitoring
-- **Redis**: Caching
-- **Prometheus**: Metrics
+We would like to acknowledge and thank the following open-source security tools and AI frameworks that power SecAuditAI:
 
 ### Security Tools
 - **CodeBERT**: Microsoft Research's code understanding model
@@ -143,49 +204,11 @@ We would like to acknowledge and thank the following open-source projects that p
 - **Cloud Custodian**: Cloud security
 - **Scout Suite**: Cloud security assessment
 
-### AI/ML Libraries
+### AI/ML Frameworks
 - **PyTorch**: Deep learning framework
 - **Transformers**: Hugging Face's NLP library
 - **Scikit-learn**: Machine learning
-- **TensorFlow**: Deep learning framework
 - **Lightning**: PyTorch training framework
-
-### Cloud SDKs
-- **boto3**: AWS SDK
-- **Azure SDK**: Microsoft Azure
-- **Google Cloud SDK**: GCP
-- **AWS Config**: AWS compliance
-- **Azure Policy**: Azure compliance
-
-### Language Parsers
-- **Esprima**: JavaScript parsing
-- **JavaParser**: Java parsing
-- **Clang**: C/C++ parsing
-- **go/parser**: Go parsing
-- **parser**: Ruby parsing
-- **PHP-Parser**: PHP parsing
-- **syn**: Rust parsing
-- **SwiftSyntax**: Swift parsing
-- **Kotlin Parser**: Kotlin parsing
-
-### Framework Tools
-- **django-inspector**: Django analysis
-- **flask-inspector**: Flask analysis
-- **express-validator**: Express.js validation
-- **spring-security**: Spring Boot security
-- **eslint-plugin-react**: React analysis
-- **vue-eslint-parser**: Vue.js analysis
-- **laravel-security**: Laravel security
-- **brakeman**: Rails security
-- **fastapi-security**: FastAPI security
-
-### Container Tools
-- **Docker SDK**: Docker integration
-- **containerd API**: Container runtime
-- **CRI-O API**: Container runtime
-- **apk-tools**: Alpine package management
-- **dpkg**: Debian package management
-- **rpm**: RPM package management
 
 ## Installation
 
@@ -256,37 +279,6 @@ secauditai report list
 secauditai report show <report_id>
 ```
 
-## AI Model Training
-
-For detailed information on training and fine-tuning LLMs for vulnerability detection, see the [LLM Training Guide](docs/llm_training.md).
-
-Key features:
-- Support for multiple datasets (CodeXGLUE, Big-Vul, Devign, SARD)
-- Custom dataset conversion tools
-- Fine-tuning capabilities
-- Performance evaluation metrics
-
-## Configuration
-
-Configuration is stored in `~/.secauditai/config.json`. You can modify settings using:
-```bash
-secauditai config set <key> <value>
-```
-
-### Real-time Configuration
-```json
-{
-  "monitoring": {
-    "interval": 300,
-    "alert_threshold": "high",
-    "notifications": {
-      "email": "your-email@example.com",
-      "slack_webhook": "your-webhook-url"
-    }
-  }
-}
-```
-
 ## Development
 
 ### Setting up Development Environment
@@ -341,5 +333,4 @@ Special thanks to:
 - Microsoft Research for CodeBERT
 - OWASP for their security tools and guidelines
 - The Python community for their excellent libraries
-- The cloud providers for their SDKs and APIs
 - All the maintainers of the open-source projects we depend on
