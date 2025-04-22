@@ -18,6 +18,9 @@ azure-mgmt-network>=22.0.0
 azure-mgmt-storage>=22.0.0
 azure-mgmt-compute>=22.0.0
 google-cloud-storage>=2.0.0
+google-cloud-compute>=1.10.0
+google-cloud-container>=2.30.0
+google-cloud-securitycenter>=1.15.0
 kubernetes>=24.0.0
 
 # AI and ML
@@ -27,6 +30,9 @@ torch>=2.0.0
 scikit-learn>=1.0.0
 pandas>=1.5.0
 numpy>=1.24.0
+sentencepiece>=0.1.99
+tokenizers>=0.13.3
+joblib>=1.2.0
 
 # Code analysis
 tree-sitter>=0.20.0
@@ -38,11 +44,17 @@ tree-sitter-go>=0.20.0
 # SBOM and vulnerability scanning
 syft>=0.60.0
 grype>=0.60.0
+docker>=6.0.0
+trufflehog>=3.0.0
 
 # Report generation
 jinja2>=3.0.0
 pdfkit>=1.0.0
 wkhtmltopdf>=0.12.6
+
+# Notifications
+slack-sdk>=3.20.0
+python-smtplib>=0.0.1
 
 # Testing and development
 pytest>=7.0.0

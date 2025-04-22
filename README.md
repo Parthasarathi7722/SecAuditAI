@@ -13,6 +13,148 @@ A powerful CLI security audit tool that combines AI-powered code analysis, cloud
 - **Real-time Analysis**: Immediate feedback and continuous monitoring capabilities
 - **Customizable AI Models**: Train and fine-tune models for specific security needs
 
+### Experimental Features
+- **Zero-Day Vulnerability Detection**: Advanced AI models for detecting unknown vulnerabilities
+  - Semantic code analysis using CodeBERT
+  - Anomaly detection with Isolation Forest
+  - Behavior pattern analysis
+  - Combined scoring system for vulnerability assessment
+  - Note: This feature is experimental and may produce false positives
+
+## Supported Languages and Frameworks
+
+### Code Analysis
+- **Languages**:
+  - Python
+  - JavaScript/TypeScript
+  - Java
+  - C/C++
+  - Go
+  - Ruby
+  - PHP
+  - Rust
+  - Swift
+  - Kotlin
+
+- **Frameworks**:
+  - Django
+  - Flask
+  - Express.js
+  - Spring Boot
+  - React
+  - Vue.js
+  - Laravel
+  - Ruby on Rails
+  - FastAPI
+
+### Container Image Analysis
+- **Base Images**:
+  - Alpine
+  - Ubuntu
+  - Debian
+  - CentOS
+  - Red Hat Enterprise Linux
+  - Amazon Linux
+
+- **Container Runtimes**:
+  - Docker
+  - containerd
+  - CRI-O
+
+## Vulnerability Detection
+
+### Code Security Analysis
+SecAuditAI performs comprehensive code analysis to detect various security vulnerabilities:
+
+1. **Authentication & Authorization Issues**:
+   - Broken Access Control
+   - Insecure Direct Object References (IDOR)
+   - Missing Authentication
+   - Session Management Issues
+   - JWT Implementation Flaws
+
+2. **Injection Vulnerabilities**:
+   - SQL Injection
+   - NoSQL Injection
+   - Command Injection
+   - LDAP Injection
+   - XPath Injection
+
+3. **Cross-Site Scripting (XSS)**:
+   - Stored XSS
+   - Reflected XSS
+   - DOM-based XSS
+   - Content Security Policy (CSP) Issues
+
+4. **Data Security Issues**:
+   - Sensitive Data Exposure
+   - Insecure Deserialization
+   - XML External Entities (XXE)
+   - Insecure File Uploads
+
+5. **Security Misconfigurations**:
+   - Default Credentials
+   - Debug Features Enabled
+   - Directory Listing
+   - Unnecessary Services
+   - Insecure Headers
+
+### SBOM Analysis and Vulnerability Matching
+
+SecAuditAI performs comprehensive SBOM analysis with the following capabilities:
+
+1. **Dependency Analysis**:
+   - Package Name and Version Detection
+   - Direct and Transitive Dependencies
+   - License Analysis
+   - Dependency Tree Visualization
+
+2. **Vulnerability Database Integration**:
+   - National Vulnerability Database (NVD)
+   - GitHub Security Advisories
+   - OSV Database
+   - Snyk Vulnerability Database
+   - OSS Index
+
+3. **Vulnerability Matching Process**:
+   - CVE ID Matching
+   - Version Range Analysis
+   - Severity Scoring (CVSS)
+   - Exploit Availability Check
+   - Patch Availability Verification
+
+4. **Advanced Analysis**:
+   - Dependency Confusion Detection
+   - Supply Chain Attack Prevention
+   - Malicious Package Detection
+   - Outdated Dependency Analysis
+   - License Compliance Checking
+
+### AI-Powered Analysis
+
+SecAuditAI uses advanced AI models for vulnerability detection:
+
+1. **Static Analysis**:
+   - Pattern Recognition
+   - Code Flow Analysis
+   - Data Flow Analysis
+   - Control Flow Analysis
+   - Taint Analysis
+
+2. **Semantic Analysis**:
+   - Context-Aware Vulnerability Detection
+   - False Positive Reduction
+   - Custom Rule Learning
+   - Code Understanding
+   - Security Pattern Recognition
+
+3. **Training Data Sources**:
+   - CodeXGLUE Dataset
+   - Big-Vul Dataset
+   - Devign Dataset
+   - SARD Dataset
+   - Custom Training Data
+
 ## Installation
 
 1. Clone the repository:
