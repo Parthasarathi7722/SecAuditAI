@@ -12,10 +12,21 @@ Detect security vulnerabilities in source code using advanced LLM models
   - Custom-trained models on CodeXGLUE and Big-Vul datasets
 
 ### Cloud Infrastructure Scanning
-Support for multiple cloud platforms (AWS, Azure, GCP)
+Support for multiple cloud platforms (AWS, Azure, GCP) and Kubernetes
 - **Powered by**:
+  - Prowler for comprehensive cloud security assessment
   - Cloud Custodian for policy enforcement
-  - Scout Suite for cloud security assessment
+  - Multi-cloud security monitoring and compliance
+
+Prowler provides:
+- Continuous security monitoring
+- Compliance framework checks (CIS, NIST, PCI-DSS, etc.)
+- Real-time security assessments
+- Incident response capabilities
+- Hardening recommendations
+- Forensics readiness
+- Kubernetes security scanning
+- Multi-cloud compliance reporting
 
 ### SBOM Vulnerability Detection
 Analyze software dependencies for known vulnerabilities
@@ -202,7 +213,7 @@ We would like to acknowledge and thank the following open-source security tools 
 - **OpenSCAP**: Security compliance
 - **Inspec**: Compliance testing
 - **Cloud Custodian**: Cloud security
-- **Scout Suite**: Cloud security assessment
+- **Prowler**: Cloud and Kubernetes security assessment and compliance
 
 ### AI/ML Frameworks
 - **PyTorch**: Deep learning framework
@@ -334,3 +345,118 @@ Special thanks to:
 - OWASP for their security tools and guidelines
 - The Python community for their excellent libraries
 - All the maintainers of the open-source projects we depend on
+
+## Sample Reports
+
+### Cloud Security Assessment Report
+```json
+{
+  "scan_id": "scan-2024-03-15-123456",
+  "timestamp": "2024-03-15T12:34:56Z",
+  "provider": "aws",
+  "compliance_frameworks": ["cis-1.5", "nist-800-53"],
+  "summary": {
+    "total_checks": 250,
+    "passed": 180,
+    "failed": 45,
+    "manual": 25,
+    "critical": 5,
+    "high": 15,
+    "medium": 25,
+    "low": 0
+  },
+  "findings": [
+    {
+      "check_id": "iam-001",
+      "status": "FAIL",
+      "severity": "high",
+      "title": "Root Account MFA Not Enabled",
+      "description": "Root account does not have MFA enabled",
+      "remediation": "Enable MFA for root account",
+      "resource_id": "123456789012",
+      "region": "us-east-1"
+    },
+    {
+      "check_id": "s3-002",
+      "status": "PASS",
+      "severity": "medium",
+      "title": "S3 Bucket Encryption",
+      "description": "S3 bucket has server-side encryption enabled",
+      "resource_id": "my-secure-bucket",
+      "region": "us-west-2"
+    }
+  ]
+}
+```
+
+### Kubernetes Security Report
+```json
+{
+  "scan_id": "k8s-scan-2024-03-15-789012",
+  "timestamp": "2024-03-15T13:45:00Z",
+  "cluster": "production-cluster",
+  "summary": {
+    "total_checks": 150,
+    "passed": 120,
+    "failed": 20,
+    "manual": 10,
+    "critical": 2,
+    "high": 8,
+    "medium": 10,
+    "low": 0
+  },
+  "findings": [
+    {
+      "check_id": "k8s-001",
+      "status": "FAIL",
+      "severity": "critical",
+      "title": "Privileged Container",
+      "description": "Container running with privileged access",
+      "remediation": "Remove privileged access from container",
+      "namespace": "default",
+      "pod": "nginx-pod",
+      "container": "nginx"
+    },
+    {
+      "check_id": "k8s-002",
+      "status": "PASS",
+      "severity": "medium",
+      "title": "Network Policy",
+      "description": "Network policy is properly configured",
+      "namespace": "default",
+      "resource": "network-policy"
+    }
+  ]
+}
+```
+
+### Compliance Report
+```json
+{
+  "scan_id": "compliance-2024-03-15-345678",
+  "timestamp": "2024-03-15T14:30:00Z",
+  "framework": "cis-1.5",
+  "summary": {
+    "total_requirements": 100,
+    "compliant": 85,
+    "non_compliant": 15,
+    "not_applicable": 0
+  },
+  "requirements": [
+    {
+      "id": "cis-1.1",
+      "title": "Ensure IAM password policy requires minimum length",
+      "status": "compliant",
+      "description": "Password policy requires minimum length of 14 characters",
+      "evidence": "Password policy configuration"
+    },
+    {
+      "id": "cis-1.2",
+      "title": "Ensure multi-factor authentication is enabled",
+      "status": "non_compliant",
+      "description": "MFA is not enabled for all IAM users",
+      "remediation": "Enable MFA for all IAM users"
+    }
+  ]
+}
+```

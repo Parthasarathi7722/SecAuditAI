@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="secauditai",
     version="0.1.0",
-    packages=find_packages(),
+    packages=find_packages(include=["secauditai", "secauditai.*"]),
     install_requires=[
         # Core dependencies
         "click>=8.0.0",
@@ -13,6 +13,7 @@ setup(
         "pydantic>=2.0.0",
         "python-dotenv>=0.19.0",
         "tqdm>=4.65.0",
+        "requests>=2.31.0",
         
         # Cloud providers
         "boto3>=1.26.0",
@@ -43,14 +44,18 @@ setup(
         "jinja2>=3.0.0",
         "pdfkit>=1.0.0",
         "wkhtmltopdf>=0.12.6",
-        
-        # Testing and development
-        "pytest>=7.0.0",
-        "pytest-cov>=4.0.0",
-        "black>=23.0.0",
-        "flake8>=6.0.0",
-        "mypy>=1.0.0",
     ],
+    extras_require={
+        "dev": [
+            "pytest>=7.0.0",
+            "pytest-cov>=4.0.0",
+            "black>=23.0.0",
+            "flake8>=6.0.0",
+            "mypy>=1.0.0",
+            "isort>=5.0.0",
+            "pre-commit>=3.0.0",
+        ],
+    },
     entry_points={
         "console_scripts": [
             "secauditai=secauditai.cli:main",
