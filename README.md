@@ -354,21 +354,153 @@ secauditai scan container --image nginx:latest --policies-file custom_policies.y
 
 ### Report Generation
 
+SecAuditAI supports generating reports in multiple formats (JSON, HTML, PDF) for different types of scans. Here's how to generate reports for specific scan types:
+
+#### AWS Security Report
 ```bash
 # Generate JSON report
-secauditai report generate --format json --output report.json
+secauditai scan aws --profile default --region us-east-1 --output-format json --output-file aws_report.json
 
-# Generate HTML report
-secauditai report generate --format html --output report.html
+# Generate HTML report with custom template
+secauditai scan aws --profile default --region us-east-1 --output-format html --output-file aws_report.html --template custom_aws_template.html
 
 # Generate PDF report
-secauditai report generate --format pdf --output report.pdf
+secauditai scan aws --profile default --region us-east-1 --output-format pdf --output-file aws_report.pdf
 
-# List available reports
+# Generate compliance report
+secauditai scan aws --profile default --region us-east-1 --compliance cis --output-format pdf --output-file aws_cis_report.pdf
+```
+
+#### Kubernetes Security Report
+```bash
+# Generate JSON report
+secauditai scan kubernetes --cluster my-cluster --output-format json --output-file k8s_report.json
+
+# Generate HTML report with namespace filter
+secauditai scan kubernetes --cluster my-cluster --namespace default --output-format html --output-file k8s_report.html
+
+# Generate PDF report with specific checks
+secauditai scan kubernetes --cluster my-cluster --checks pods,services --output-format pdf --output-file k8s_report.pdf
+```
+
+#### Code Security Report
+```bash
+# Generate JSON report for Python code
+secauditai scan code --path /path/to/project --language python --output-format json --output-file code_report.json
+
+# Generate HTML report with AI analysis
+secauditai scan code --path /path/to/project --language python --enable-ai --output-format html --output-file code_report.html
+
+# Generate PDF report with specific checks
+secauditai scan code --path /path/to/project --language python --checks sql-injection,xss --output-format pdf --output-file code_report.pdf
+```
+
+#### SBOM Analysis Report
+```bash
+# Generate JSON report with vulnerability data
+secauditai scan sbom --path /path/to/project --check-vulnerabilities --output-format json --output-file sbom_report.json
+
+# Generate HTML report with dependency tree
+secauditai scan sbom --path /path/to/project --generate-tree --output-format html --output-file sbom_report.html
+
+# Generate PDF report with license compliance
+secauditai scan sbom --path /path/to/project --check-licenses --output-format pdf --output-file sbom_report.pdf
+```
+
+#### Container Security Report
+```bash
+# Generate JSON report
+secauditai scan container --image nginx:latest --output-format json --output-file container_report.json
+
+# Generate HTML report with specific checks
+secauditai scan container --image nginx:latest --checks vulnerabilities,config --output-format html --output-file container_report.html
+
+# Generate PDF report with custom policies
+secauditai scan container --image nginx:latest --policies-file security_policies.yaml --output-format pdf --output-file container_report.pdf
+```
+
+#### Report Management
+```bash
+# List all available reports
 secauditai report list
 
-# Show report details
+# Show details of a specific report
 secauditai report show <report-id>
+
+# Delete a report
+secauditai report delete <report-id>
+
+# Export report to different format
+secauditai report export <report-id> --format <new-format> --output <new-file>
+```
+
+#### Report Templates
+SecAuditAI comes with built-in templates for different report types, but you can also use custom templates:
+
+```bash
+# List available templates
+secauditai report templates list
+
+# Use custom template for HTML report
+secauditai scan aws --profile default --output-format html --template /path/to/custom_template.html
+
+# Generate report with specific sections
+secauditai scan aws --profile default --output-format html --sections summary,findings,recommendations
+```
+
+#### Report Configuration
+```bash
+# Set default report format
+secauditai config set report.default_format html
+
+# Set default output directory
+secauditai config set report.output_dir /path/to/reports
+
+# Configure report sections
+secauditai config set report.sections summary,findings,recommendations,metadata
+
+# Set report styling
+secauditai config set report.style dark
+```
+
+#### Report Examples
+
+1. **Comprehensive AWS Security Report**
+```bash
+secauditai scan aws \
+  --profile default \
+  --region us-east-1 \
+  --compliance cis \
+  --output-format html \
+  --output-file aws_security_report.html \
+  --sections summary,findings,recommendations,compliance \
+  --style dark
+```
+
+2. **Detailed Code Security Report with AI Analysis**
+```bash
+secauditai scan code \
+  --path /path/to/project \
+  --language python \
+  --enable-ai \
+  --output-format pdf \
+  --output-file code_security_report.pdf \
+  --sections summary,findings,ai_analysis,recommendations \
+  --template custom_code_template.html
+```
+
+3. **SBOM Report with Vulnerability Data**
+```bash
+secauditai scan sbom \
+  --path /path/to/project \
+  --check-vulnerabilities \
+  --check-licenses \
+  --generate-tree \
+  --output-format json \
+  --output-file sbom_analysis.json \
+  --include-dependencies \
+  --include-vulnerabilities \
+  --include-licenses
 ```
 
 ### Configuration
