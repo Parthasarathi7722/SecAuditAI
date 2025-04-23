@@ -223,240 +223,299 @@ We would like to acknowledge and thank the following open-source security tools 
 
 ## Installation
 
-1. Clone the repository:
 ```bash
-git clone https://github.com/Parthasarathi7722/SecAuditAI.git
-cd SecAuditAI
+# Install from PyPI
+pip install secauditai
+
+# Install with development dependencies
+pip install secauditai[dev]
+
+# Install from source
+git clone https://github.com/Parthasarathi7722/secauditai.git
+cd secauditai
+pip install -e .
 ```
 
-2. Create and activate a virtual environment:
+## Quick Start
+
 ```bash
-# Windows
-python -m venv venv
-.\venv\Scripts\activate
+# Show help
+secauditai --help
 
-# Linux/macOS
-python -m venv venv
-source venv/bin/activate
-```
+# List available scanners
+secauditai scanners list
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-4. Initialize configuration:
-```bash
-secauditai init
-```
-
-## Usage
-
-### Basic Usage
-```bash
+# Run a basic scan
 secauditai scan <target> [options]
 ```
 
-### Examples
+## Usage Guide
 
-1. Scan a code repository:
+### Cloud Security Scanning
+
+#### AWS Security Assessment
 ```bash
-secauditai scan /path/to/repo --type code
+# Basic AWS scan
+secauditai scan aws --profile default --region us-east-1
+
+# AWS scan with CIS compliance
+secauditai scan aws --profile default --region us-east-1 --compliance cis
+
+# AWS scan with specific checks
+secauditai scan aws --profile default --checks iam,ec2,s3
+
+# AWS scan with custom output
+secauditai scan aws --profile default --output-format json --output-file aws_scan.json
 ```
 
-2. Scan cloud infrastructure:
+#### Azure Security Assessment
 ```bash
-secauditai scan aws --profile default
+# Basic Azure scan
+secauditai scan azure --subscription-id <id> --resource-group <group>
+
+# Azure scan with NIST compliance
+secauditai scan azure --subscription-id <id> --compliance nist
+
+# Azure scan with specific services
+secauditai scan azure --subscription-id <id> --services storage,network,compute
 ```
 
-3. Generate SBOM and check vulnerabilities:
+#### GCP Security Assessment
 ```bash
-secauditai scan /path/to/project --type sbom
+# Basic GCP scan
+secauditai scan gcp --project <project-id> --region us-central1
+
+# GCP scan with PCI compliance
+secauditai scan gcp --project <project-id> --compliance pci
+
+# GCP scan with specific resources
+secauditai scan gcp --project <project-id> --resources compute,storage,iam
 ```
 
-4. Run CIS benchmark checks:
+#### Kubernetes Security Assessment
 ```bash
-secauditai scan aws --type cis
+# Basic Kubernetes scan
+secauditai scan kubernetes --cluster <cluster-name>
+
+# Kubernetes scan with namespace
+secauditai scan kubernetes --cluster <cluster-name> --namespace default
+
+# Kubernetes scan with specific checks
+secauditai scan kubernetes --cluster <cluster-name> --checks pods,services,ingress
 ```
 
-5. Real-time monitoring:
+### Code Security Scanning
+
 ```bash
-secauditai monitor /path/to/repo --interval 300
+# Scan Python code
+secauditai scan code --path /path/to/project --language python
+
+# Scan JavaScript code
+secauditai scan code --path /path/to/project --language javascript
+
+# Scan with specific checks
+secauditai scan code --path /path/to/project --checks sql-injection,xss,secrets
+
+# Scan with AI analysis
+secauditai scan code --path /path/to/project --enable-ai
+
+# Scan with custom rules
+secauditai scan code --path /path/to/project --rules-file custom_rules.yaml
+```
+
+### SBOM Analysis
+
+```bash
+# Generate SBOM
+secauditai scan sbom --path /path/to/project
+
+# Check for vulnerabilities
+secauditai scan sbom --path /path/to/project --check-vulnerabilities
+
+# Check license compliance
+secauditai scan sbom --path /path/to/project --check-licenses
+
+# Generate dependency tree
+secauditai scan sbom --path /path/to/project --generate-tree
+```
+
+### Container Security Scanning
+
+```bash
+# Scan Docker image
+secauditai scan container --image nginx:latest
+
+# Scan with specific checks
+secauditai scan container --image nginx:latest --checks vulnerabilities,config,secrets
+
+# Scan with custom policies
+secauditai scan container --image nginx:latest --policies-file custom_policies.yaml
 ```
 
 ### Report Generation
+
 ```bash
+# Generate JSON report
+secauditai report generate --format json --output report.json
+
+# Generate HTML report
+secauditai report generate --format html --output report.html
+
+# Generate PDF report
+secauditai report generate --format pdf --output report.pdf
+
+# List available reports
 secauditai report list
-secauditai report show <report_id>
+
+# Show report details
+secauditai report show <report-id>
+```
+
+### Configuration
+
+```bash
+# Show current configuration
+secauditai config show
+
+# Set configuration values
+secauditai config set <key> <value>
+
+# Example: Set notification settings
+secauditai config set notifications.slack.webhook_url <url>
+secauditai config set notifications.email.smtp_server <server>
+
+# Example: Set AI settings
+secauditai config set ai.provider ollama
+secauditai config set ai.model codebert
+```
+
+### Monitoring
+
+```bash
+# Start monitoring
+secauditai monitor start
+
+# Configure monitoring
+secauditai monitor config --interval 300 --notifications slack,email
+
+# Stop monitoring
+secauditai monitor stop
+```
+
+### Advanced Usage
+
+#### Custom Checks
+```bash
+# Add custom check
+secauditai checks add --name custom_check --path /path/to/check.py
+
+# List available checks
+secauditai checks list
+
+# Enable/disable checks
+secauditai checks enable custom_check
+secauditai checks disable custom_check
+```
+
+#### Plugin Management
+```bash
+# List installed plugins
+secauditai plugins list
+
+# Install plugin
+secauditai plugins install <plugin-name>
+
+# Remove plugin
+secauditai plugins remove <plugin-name>
+```
+
+#### Compliance Frameworks
+```bash
+# List supported frameworks
+secauditai compliance list
+
+# Generate compliance report
+secauditai compliance generate --framework cis --provider aws
+
+# Check compliance status
+secauditai compliance check --framework cis --provider aws
+```
+
+### Environment Variables
+
+```bash
+# Set API keys
+export SECAUDITAI_AWS_ACCESS_KEY_ID=<key>
+export SECAUDITAI_AWS_SECRET_ACCESS_KEY=<secret>
+export SECAUDITAI_AZURE_CLIENT_ID=<id>
+export SECAUDITAI_AZURE_CLIENT_SECRET=<secret>
+export SECAUDITAI_GCP_CREDENTIALS=<path>
+
+# Set notification settings
+export SECAUDITAI_SLACK_WEBHOOK_URL=<url>
+export SECAUDITAI_EMAIL_SMTP_SERVER=<server>
+```
+
+### Common Examples
+
+1. **Full AWS Security Assessment with AI Analysis**
+```bash
+secauditai scan aws \
+  --profile default \
+  --region us-east-1 \
+  --compliance cis \
+  --enable-ai \
+  --output-format html \
+  --output-file aws_security_report.html
+```
+
+2. **Code Security Scan with Custom Rules**
+```bash
+secauditai scan code \
+  --path /path/to/project \
+  --language python \
+  --enable-ai \
+  --checks all \
+  --rules-file custom_rules.yaml \
+  --output-format json
+```
+
+3. **Container Security Assessment with Policies**
+```bash
+secauditai scan container \
+  --image nginx:latest \
+  --checks vulnerabilities,config,secrets \
+  --policies-file security_policies.yaml \
+  --output-format pdf
+```
+
+4. **Continuous Monitoring Setup**
+```bash
+# Configure monitoring
+secauditai monitor config \
+  --interval 300 \
+  --notifications slack,email \
+  --checks high,medium
+
+# Start monitoring
+secauditai monitor start
+```
+
+5. **Compliance Report Generation**
+```bash
+secauditai compliance generate \
+  --framework cis \
+  --provider aws \
+  --format pdf \
+  --output aws-cis-report.pdf
+```
+
+For more detailed information about specific commands and options, use:
+```bash
+secauditai <command> --help
 ```
 
 ## Development
 
 ### Setting up Development Environment
-```bash
-# Windows
-.\setup_dev.bat
-
-# Linux/macOS
-./setup_dev.sh
-```
-
-### Running Tests
-```bash
-pytest
-```
-
-### Contributing
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## Roadmap
-
-- [ ] Implement email notification system
-- [ ] Add support for more cloud providers (Alibaba Cloud, Oracle Cloud)
-- [ ] Enhance SBOM analysis with dependency graph visualization
-- [ ] Add support for more programming languages in code analysis
-- [ ] Implement automated fix suggestions for detected vulnerabilities
-
-- [ ] Develop a web dashboard for monitoring and reporting
-- [ ] Add support for container security scanning
-- [ ] Implement CI/CD pipeline integration
-- [ ] Add support for custom security rules and policies
-- [ ] Develop a plugin marketplace for community contributions
-
-- [ ] Implement advanced AI models for zero-day vulnerability detection
-- [ ] Add support for compliance frameworks (SOC2, ISO 27001, etc.)
-- [ ] Develop a threat intelligence integration system
-- [ ] Create a vulnerability prediction system
-- [ ] Implement automated remediation workflows
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-We extend our deepest gratitude to all the open-source projects and communities that have made SecAuditAI possible. Your contributions to the security and development communities are invaluable.
-
-Special thanks to:
-- Microsoft Research for CodeBERT
-- OWASP for their security tools and guidelines
-- The Python community for their excellent libraries
-- All the maintainers of the open-source projects we depend on
-
-## Sample Reports
-
-### Cloud Security Assessment Report
-```json
-{
-  "scan_id": "scan-2024-03-15-123456",
-  "timestamp": "2024-03-15T12:34:56Z",
-  "provider": "aws",
-  "compliance_frameworks": ["cis-1.5", "nist-800-53"],
-  "summary": {
-    "total_checks": 250,
-    "passed": 180,
-    "failed": 45,
-    "manual": 25,
-    "critical": 5,
-    "high": 15,
-    "medium": 25,
-    "low": 0
-  },
-  "findings": [
-    {
-      "check_id": "iam-001",
-      "status": "FAIL",
-      "severity": "high",
-      "title": "Root Account MFA Not Enabled",
-      "description": "Root account does not have MFA enabled",
-      "remediation": "Enable MFA for root account",
-      "resource_id": "123456789012",
-      "region": "us-east-1"
-    },
-    {
-      "check_id": "s3-002",
-      "status": "PASS",
-      "severity": "medium",
-      "title": "S3 Bucket Encryption",
-      "description": "S3 bucket has server-side encryption enabled",
-      "resource_id": "my-secure-bucket",
-      "region": "us-west-2"
-    }
-  ]
-}
-```
-
-### Kubernetes Security Report
-```json
-{
-  "scan_id": "k8s-scan-2024-03-15-789012",
-  "timestamp": "2024-03-15T13:45:00Z",
-  "cluster": "production-cluster",
-  "summary": {
-    "total_checks": 150,
-    "passed": 120,
-    "failed": 20,
-    "manual": 10,
-    "critical": 2,
-    "high": 8,
-    "medium": 10,
-    "low": 0
-  },
-  "findings": [
-    {
-      "check_id": "k8s-001",
-      "status": "FAIL",
-      "severity": "critical",
-      "title": "Privileged Container",
-      "description": "Container running with privileged access",
-      "remediation": "Remove privileged access from container",
-      "namespace": "default",
-      "pod": "nginx-pod",
-      "container": "nginx"
-    },
-    {
-      "check_id": "k8s-002",
-      "status": "PASS",
-      "severity": "medium",
-      "title": "Network Policy",
-      "description": "Network policy is properly configured",
-      "namespace": "default",
-      "resource": "network-policy"
-    }
-  ]
-}
-```
-
-### Compliance Report
-```json
-{
-  "scan_id": "compliance-2024-03-15-345678",
-  "timestamp": "2024-03-15T14:30:00Z",
-  "framework": "cis-1.5",
-  "summary": {
-    "total_requirements": 100,
-    "compliant": 85,
-    "non_compliant": 15,
-    "not_applicable": 0
-  },
-  "requirements": [
-    {
-      "id": "cis-1.1",
-      "title": "Ensure IAM password policy requires minimum length",
-      "status": "compliant",
-      "description": "Password policy requires minimum length of 14 characters",
-      "evidence": "Password policy configuration"
-    },
-    {
-      "id": "cis-1.2",
-      "title": "Ensure multi-factor authentication is enabled",
-      "status": "non_compliant",
-      "description": "MFA is not enabled for all IAM users",
-      "remediation": "Enable MFA for all IAM users"
-    }
-  ]
-}
 ```
