@@ -650,4 +650,135 @@ secauditai <command> --help
 ## Development
 
 ### Setting up Development Environment
+
+1. **Clone the repository**:
+```bash
+git clone https://github.com/Parthasarathi7722/secauditai.git
+cd secauditai
 ```
+
+2. **Create and activate virtual environment**:
+```bash
+# On Windows
+python -m venv venv
+.\venv\Scripts\activate
+
+# On Linux/macOS
+python -m venv venv
+source venv/bin/activate
+```
+
+3. **Install development dependencies**:
+```bash
+pip install -e ".[dev]"
+```
+
+4. **Install pre-commit hooks**:
+```bash
+pre-commit install
+```
+
+5. **Run tests**:
+```bash
+pytest
+```
+
+### Development Guidelines
+
+1. **Code Style**:
+   - Follow PEP 8 for Python code
+   - Use type hints for all function parameters and return values
+   - Document all public functions and classes with docstrings
+   - Keep functions small and focused on a single responsibility
+
+2. **Testing**:
+   - Write unit tests for all new features
+   - Maintain test coverage above 90%
+   - Use pytest for testing
+   - Include integration tests for complex features
+
+3. **Documentation**:
+   - Update README.md for new features
+   - Add docstrings to all new code
+   - Update API documentation
+   - Include usage examples
+
+4. **Version Control**:
+   - Use meaningful commit messages
+   - Create feature branches for new work
+   - Submit pull requests for review
+   - Keep the main branch stable
+
+### Project Structure
+```
+secauditai/
+├── secauditai/              # Main package
+│   ├── core/               # Core functionality
+│   ├── plugins/            # Scanner plugins
+│   ├── templates/          # Report templates
+│   └── utils/              # Utility functions
+├── tests/                  # Test suite
+├── docs/                   # Documentation
+├── examples/               # Usage examples
+└── scripts/                # Development scripts
+```
+
+## Contributing
+
+We welcome contributions from the community! Here's how you can help:
+
+1. **Report Issues**:
+   - Check existing issues before creating new ones
+   - Provide detailed information about the problem
+   - Include steps to reproduce the issue
+
+2. **Submit Pull Requests**:
+   - Fork the repository
+   - Create a feature branch
+   - Make your changes
+   - Submit a pull request with a clear description
+
+3. **Code Review**:
+   - Review open pull requests
+   - Provide constructive feedback
+   - Help maintain code quality
+
+4. **Documentation**:
+   - Improve existing documentation
+   - Add examples and tutorials
+   - Fix typos and errors
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Installation Problems**:
+   - Ensure Python 3.8+ is installed
+   - Check virtual environment setup
+   - Verify all dependencies are installed
+
+2. **Scanner Issues**:
+   - Check scanner configuration
+   - Verify required permissions
+   - Ensure target is accessible
+
+3. **Report Generation**:
+   - Check template files
+   - Verify output directory permissions
+   - Ensure required dependencies are installed
+
+4. **AI Analysis**:
+   - Check model availability
+   - Verify API keys and credentials
+   - Ensure sufficient resources
+
+### Getting Help
+
+- Check the [documentation](https://github.com/Parthasarathi7722/secauditai/docs)
+- Search [existing issues](https://github.com/Parthasarathi7722/secauditai/issues)
+- Join our [Discord community](https://discord.gg/secauditai)
+- Contact the maintainers
+
+## License
+
+SecAuditAI is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
