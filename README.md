@@ -782,3 +782,51 @@ We welcome contributions from the community! Here's how you can help:
 ## License
 
 SecAuditAI is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+### Compliance Framework Scanning
+Perform comprehensive compliance checks for various frameworks:
+- **SOC-2**: Security, Availability, Processing Integrity, Confidentiality, and Privacy
+- **GDPR**: Data Protection, Rights, Security, and Accountability
+- **PCI-DSS**: Network Security, Data Protection, Access Control, Monitoring, and Maintenance
+
+### Infrastructure as Code (IAC) Security
+Analyze infrastructure code for security best practices and compliance:
+- **Terraform**: Security, compliance, and best practices checks
+- **CloudFormation**: IAM, network security, and AWS best practices
+- **Kubernetes**: Pod security, RBAC, and container security
+- **Ansible**: Privilege escalation, sensitive data handling, and playbook security
+
+### Compliance Scanning
+
+```bash
+# SOC-2 Compliance Check
+secauditai scan compliance --framework soc2 --target /path/to/config
+
+# GDPR Compliance Check
+secauditai scan compliance --framework gdpr --target /path/to/config
+
+# PCI-DSS Compliance Check
+secauditai scan compliance --framework pci-dss --target /path/to/config
+
+# Generate Compliance Report
+secauditai scan compliance --framework soc2 --target /path/to/config --output-format html --output-file compliance_report.html
+```
+
+### IAC Security Scanning
+
+```bash
+# Scan Terraform Configuration
+secauditai scan iac --target terraform.tf
+
+# Scan CloudFormation Template
+secauditai scan iac --target template.yaml
+
+# Scan Kubernetes Manifests
+secauditai scan iac --target k8s/
+
+# Scan Ansible Playbooks
+secauditai scan iac --target playbook.yml
+
+# Generate IAC Security Report
+secauditai scan iac --target /path/to/iac --output-format json --output-file iac_security_report.json
+```
