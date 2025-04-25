@@ -1,832 +1,684 @@
 # SecAuditAI
 
-A powerful CLI security audit tool that combines AI-powered code analysis, cloud infrastructure scanning, SBOM vulnerability detection, and CIS benchmark checks.
+SecAuditAI is a comprehensive security auditing tool that leverages AI to perform automated security assessments across various domains including cloud infrastructure, code analysis, and compliance checks.
 
 ## Features
 
-### AI-Powered Code Analysis
-Detect security vulnerabilities in source code using advanced LLM models
-- **Powered by**:
-  - CodeBERT (Microsoft Research) for semantic code analysis
-  - Tree-sitter for language parsing
-  - Custom-trained models on CodeXGLUE and Big-Vul datasets
-
-### Cloud Infrastructure Scanning
-Support for multiple cloud platforms (AWS, Azure, GCP) and Kubernetes
-- **Powered by**:
-  - Prowler for comprehensive cloud security assessment
-  - Cloud Custodian for policy enforcement
-  - Multi-cloud security monitoring and compliance
-
-Prowler provides:
-- Continuous security monitoring
-- Compliance framework checks (CIS, NIST, PCI-DSS, etc.)
-- Real-time security assessments
-- Incident response capabilities
-- Hardening recommendations
-- Forensics readiness
-- Kubernetes security scanning
-- Multi-cloud compliance reporting
-
-### SBOM Vulnerability Detection
-Analyze software dependencies for known vulnerabilities
-- **Powered by**:
-  - Syft for SBOM generation
-  - Grype for vulnerability scanning
-  - OWASP Dependency-Check
-
-### CIS Benchmark Checks
-Automated compliance checking against CIS benchmarks
-- **Powered by**:
-  - OpenSCAP
-  - Inspec for compliance testing
-
-### Modular Plugin Architecture
-Extensible design for adding new scanners and analyzers
-- **Powered by**:
-  - Click framework for CLI interface
-  - Pydantic for configuration management
-
-### Comprehensive Reporting
-Generate detailed reports in multiple formats (JSON, HTML, PDF)
-- **Powered by**:
-  - Jinja2 for HTML template rendering
-  - WeasyPrint for PDF generation
-
-### Real-time Analysis
-Immediate feedback and continuous monitoring capabilities
-- **Powered by**:
-  - Watchdog for file system monitoring
-  - Slack API for notifications
-
-### Customizable AI Models
-Train and fine-tune models for specific security needs
-- **Powered by**:
-  - Hugging Face Transformers
-  - PyTorch Lightning
-  - Scikit-learn
-
-## Vulnerability Detection
-
-### Code Security Analysis
-SecAuditAI performs comprehensive code analysis to detect various security vulnerabilities:
-
-1. **Authentication & Authorization Issues**:
-   - Broken Access Control
-   - Insecure Direct Object References (IDOR)
-   - Missing Authentication
-   - Session Management Issues
-   - JWT Implementation Flaws
-
-2. **Injection Vulnerabilities**:
-   - SQL Injection
-   - NoSQL Injection
-   - Command Injection
-   - LDAP Injection
-   - XPath Injection
-
-3. **Cross-Site Scripting (XSS)**:
-   - Stored XSS
-   - Reflected XSS
-   - DOM-based XSS
-   - Content Security Policy (CSP) Issues
-
-4. **Data Security Issues**:
-   - Sensitive Data Exposure
-   - Insecure Deserialization
-   - XML External Entities (XXE)
-   - Insecure File Uploads
-
-5. **Security Misconfigurations**:
-   - Default Credentials
-   - Debug Features Enabled
-   - Directory Listing
-   - Unnecessary Services
-   - Insecure Headers
-
-### SBOM Analysis and Vulnerability Matching
-
-SecAuditAI performs comprehensive SBOM analysis with the following capabilities:
-
-1. **Dependency Analysis**:
-   - Package Name and Version Detection
-   - Direct and Transitive Dependencies
-   - License Analysis
-   - Dependency Tree Visualization
-
-2. **Vulnerability Database Integration**:
-   - National Vulnerability Database (NVD)
-   - GitHub Security Advisories
-   - OSV Database
-   - Snyk Vulnerability Database
-   - OSS Index
-
-3. **Vulnerability Matching Process**:
-   - CVE ID Matching
-   - Version Range Analysis
-   - Severity Scoring (CVSS)
-   - Exploit Availability Check
-   - Patch Availability Verification
-
-4. **Advanced Analysis**:
-   - Dependency Confusion Detection
-   - Supply Chain Attack Prevention
-   - Malicious Package Detection
-   - Outdated Dependency Analysis
-   - License Compliance Checking
-
-### AI-Powered Analysis
-
-SecAuditAI uses advanced AI models for vulnerability detection:
-
-1. **Static Analysis**:
-   - Pattern Recognition
-   - Code Flow Analysis
-   - Data Flow Analysis
-   - Control Flow Analysis
-   - Taint Analysis
-
-2. **Semantic Analysis**:
-   - Context-Aware Vulnerability Detection
-   - False Positive Reduction
-   - Custom Rule Learning
-   - Code Understanding
-   - Security Pattern Recognition
-
-3. **Training Data Sources**:
-   - CodeXGLUE Dataset
-   - Big-Vul Dataset
-   - Devign Dataset
-   - SARD Dataset
-   - Custom Training Data
-
-## Supported Languages and Frameworks
-
-### Code Analysis
-- **Languages**:
-  - Python (using ast and tokenize)
-  - JavaScript/TypeScript (using Esprima)
-  - Java (using JavaParser)
-  - C/C++ (using Clang)
-  - Go (using go/parser)
-  - Ruby (using parser)
-  - PHP (using PHP-Parser)
-  - Rust (using syn)
-  - Swift (using SwiftSyntax)
-  - Kotlin (using Kotlin Parser)
-
-- **Frameworks**:
-  - Django (using django-inspector)
-  - Flask (using flask-inspector)
-  - Express.js (using express-validator)
-  - Spring Boot (using spring-security)
-  - React (using eslint-plugin-react)
-  - Vue.js (using vue-eslint-parser)
-  - Laravel (using laravel-security)
-  - Ruby on Rails (using brakeman)
-  - FastAPI (using fastapi-security)
-
-### Container Image Analysis
-- **Base Images**:
-  - Alpine (using apk-tools)
-  - Ubuntu (using dpkg)
-  - Debian (using dpkg)
-  - CentOS (using rpm)
-  - Red Hat Enterprise Linux (using rpm)
-  - Amazon Linux (using rpm)
-
-- **Container Runtimes**:
-  - Docker (using Docker SDK)
-  - containerd (using containerd API)
-  - CRI-O (using CRI-O API)
-
-## Open Source Credits
-
-We would like to acknowledge and thank the following open-source security tools and AI frameworks that power SecAuditAI:
-
-### Security Tools
-- **CodeBERT**: Microsoft Research's code understanding model
-- **Tree-sitter**: Language parsing
-- **Syft**: SBOM generation
-- **Grype**: Vulnerability scanning
-- **OWASP Dependency-Check**: Dependency analysis
-- **OpenSCAP**: Security compliance
-- **Inspec**: Compliance testing
-- **Cloud Custodian**: Cloud security
-- **Prowler**: Cloud and Kubernetes security assessment and compliance
-
-### AI/ML Frameworks
-- **PyTorch**: Deep learning framework
-- **Transformers**: Hugging Face's NLP library
-- **Scikit-learn**: Machine learning
-- **Lightning**: PyTorch training framework
+- **AI-Powered Code Analysis**: Advanced static code analysis using Tree-sitter and custom vulnerability detection models
+- **Cloud Infrastructure Scanning**: Comprehensive security assessment for AWS, Azure, and GCP environments
+- **SBOM Vulnerability Detection**: Automated Software Bill of Materials analysis and vulnerability scanning
+- **CIS Benchmark Checks**: Automated Center for Internet Security benchmark compliance verification
+- **Modular Plugin Architecture**: Extensible design allowing easy addition of new scanners and analyzers
+- **Comprehensive Reporting**: Detailed security reports with actionable insights and remediation steps
+- **Real-time Analysis**: Continuous monitoring and alerting capabilities
+- **Compliance Framework Support**: Built-in support for major compliance frameworks (CIS, PCI, HIPAA, NIST, ISO27001)
+- **Zero-Day Vulnerability Detection**: Advanced AI models for detecting unknown vulnerabilities
+- **Container Security**: Comprehensive container image scanning and runtime security monitoring
+- **Infrastructure as Code Security**: Automated security checks for Terraform, CloudFormation, and ARM templates
+- **API Security Testing**: Automated API security testing and vulnerability detection
+- **Custom Rule Engine**: Support for custom security rules and policies
+- **Integration Support**: Slack notifications and webhook integrations for alerts
+- **Training Data Preparation**: Tools for preparing and validating training data for AI models
 
 ## Installation
 
+### Using Docker (Recommended)
+
+1. Clone the repository:
 ```bash
-# Install from PyPI
-pip install secauditai
+git clone https://github.com/yourusername/SecAuditAI.git
+cd SecAuditAI
+```
 
-# Install with development dependencies
-pip install secauditai[dev]
+2. Create a `.env` file with your cloud credentials:
+```bash
+# AWS Credentials
+AWS_ACCESS_KEY_ID=your_aws_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret
+AWS_DEFAULT_REGION=your_region
 
-# Install from source
-git clone https://github.com/Parthasarathi7722/secauditai.git
-cd secauditai
+# Azure Credentials
+AZURE_CLIENT_ID=your_azure_client_id
+AZURE_CLIENT_SECRET=your_azure_secret
+AZURE_TENANT_ID=your_azure_tenant_id
+
+# GCP Credentials
+GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
+```
+
+3. Build and run the Docker container:
+```bash
+docker-compose build
+docker-compose up
+```
+
+### Manual Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/SecAuditAI.git
+cd SecAuditAI
+```
+
+2. Create and activate virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+```
+
+4. Install binary tools:
+```bash
+# Install Grype
+curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+
+# Install Syft
+curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+
+# Install Prowler
+pip install prowler-cloud
+```
+
+5. Install the package:
+```bash
 pip install -e .
 ```
 
-## Quick Start
+## Tooling Details
 
-```bash
-# Show help
-secauditai --help
+### Security Scanning Tools
 
-# List available scanners
-secauditai scanners list
+1. **Grype (Anchore)**
+   - Vulnerability scanning for container images and filesystems
+   - Supports multiple package formats
+   - Continuous vulnerability database updates
+   - Official Documentation: https://github.com/anchore/grype
 
-# Run a basic scan
-secauditai scan <target> [options]
-```
+2. **Syft (Anchore)**
+   - Software Bill of Materials (SBOM) generation
+   - Supports multiple package formats
+   - Detailed dependency analysis
+   - Official Documentation: https://github.com/anchore/syft
 
-## Usage Guide
+3. **Prowler**
+   - AWS security best practices assessment
+   - CIS benchmark checks
+   - Multiple compliance frameworks
+   - Official Documentation: https://github.com/prowler-cloud/prowler
 
-### Cloud Security Scanning
+4. **OpenSCAP**
+   - Security compliance checking
+   - Vulnerability scanning
+   - Configuration assessment
+   - Official Documentation: https://www.open-scap.org/
 
-#### AWS Security Assessment
-```bash
-# Basic AWS scan
-secauditai scan aws --profile default --region us-east-1
+5. **InSpec**
+   - Infrastructure compliance testing
+   - Security policy enforcement
+   - Multi-platform support
+   - Official Documentation: https://www.inspec.io/
 
-# AWS scan with CIS compliance
-secauditai scan aws --profile default --region us-east-1 --compliance cis
-
-# AWS scan with specific checks
-secauditai scan aws --profile default --checks iam,ec2,s3
-
-# AWS scan with custom output
-secauditai scan aws --profile default --output-format json --output-file aws_scan.json
-```
-
-#### Azure Security Assessment
-```bash
-# Basic Azure scan
-secauditai scan azure --subscription-id <id> --resource-group <group>
-
-# Azure scan with NIST compliance
-secauditai scan azure --subscription-id <id> --compliance nist
-
-# Azure scan with specific services
-secauditai scan azure --subscription-id <id> --services storage,network,compute
-```
-
-#### GCP Security Assessment
-```bash
-# Basic GCP scan
-secauditai scan gcp --project <project-id> --region us-central1
-
-# GCP scan with PCI compliance
-secauditai scan gcp --project <project-id> --compliance pci
-
-# GCP scan with specific resources
-secauditai scan gcp --project <project-id> --resources compute,storage,iam
-```
-
-#### Kubernetes Security Assessment
-```bash
-# Basic Kubernetes scan
-secauditai scan kubernetes --cluster <cluster-name>
-
-# Kubernetes scan with namespace
-secauditai scan kubernetes --cluster <cluster-name> --namespace default
-
-# Kubernetes scan with specific checks
-secauditai scan kubernetes --cluster <cluster-name> --checks pods,services,ingress
-```
+## Scanning Options
 
 ### Code Security Scanning
 
 ```bash
-# Scan Python code
-secauditai scan code --path /path/to/project --language python
+# Basic code scan
+secauditai scan code /path/to/repo
 
-# Scan JavaScript code
-secauditai scan code --path /path/to/project --language javascript
-
-# Scan with specific checks
-secauditai scan code --path /path/to/project --checks sql-injection,xss,secrets
-
-# Scan with AI analysis
-secauditai scan code --path /path/to/project --enable-ai
+# Scan with specific languages
+secauditai scan code /path/to/repo --languages python,javascript
 
 # Scan with custom rules
-secauditai scan code --path /path/to/project --rules-file custom_rules.yaml
+secauditai scan code /path/to/repo --rules custom_rules.yaml
+
+# Generate detailed report
+secauditai scan code /path/to/repo --output report.html
+```
+
+### Cloud Infrastructure Scanning
+
+#### AWS
+```bash
+# Basic AWS scan
+secauditai scan aws --profile default
+
+# Scan specific services
+secauditai scan aws --services ec2,s3,iam
+
+# Scan with compliance framework
+secauditai scan aws --compliance cis
+
+# Generate detailed report
+secauditai scan aws --output aws_report.html
+```
+
+#### Azure
+```bash
+# Basic Azure scan
+secauditai scan azure --subscription-id <id>
+
+# Scan specific resource groups
+secauditai scan azure --resource-groups rg1,rg2
+
+# Scan with compliance framework
+secauditai scan azure --compliance nist
+
+# Generate detailed report
+secauditai scan azure --output azure_report.html
+```
+
+#### GCP
+```bash
+# Basic GCP scan
+secauditai scan gcp --project-id <id>
+
+# Scan specific services
+secauditai scan gcp --services compute,storage,iam
+
+# Scan with compliance framework
+secauditai scan gcp --compliance iso27001
+
+# Generate detailed report
+secauditai scan gcp --output gcp_report.html
+```
+
+### Kubernetes Security
+
+```bash
+# Basic Kubernetes scan
+secauditai scan k8s --context <context>
+
+# Scan specific namespaces
+secauditai scan k8s --namespaces default,kube-system
+
+# Scan with compliance framework
+secauditai scan k8s --compliance cis
+
+# Generate detailed report
+secauditai scan k8s --output k8s_report.html
 ```
 
 ### SBOM Analysis
 
 ```bash
 # Generate SBOM
-secauditai scan sbom --path /path/to/project
+secauditai sbom generate /path/to/project
 
-# Check for vulnerabilities
-secauditai scan sbom --path /path/to/project --check-vulnerabilities
+# Analyze SBOM for vulnerabilities
+secauditai sbom analyze sbom.json
 
-# Check license compliance
-secauditai scan sbom --path /path/to/project --check-licenses
+# Export SBOM in different formats
+secauditai sbom export sbom.json --format spdx,cyclonedx
 
-# Generate dependency tree
-secauditai scan sbom --path /path/to/project --generate-tree
+# Generate detailed report
+secauditai sbom report sbom.json --output sbom_report.html
 ```
 
-### Container Security Scanning
+### Container Security
 
 ```bash
-# Scan Docker image
-secauditai scan container --image nginx:latest
+# Scan container image
+secauditai container scan image:tag
+
+# Scan container runtime
+secauditai container scan runtime
 
 # Scan with specific checks
-secauditai scan container --image nginx:latest --checks vulnerabilities,config,secrets
+secauditai container scan image:tag --checks vuln,config
 
-# Scan with custom policies
-secauditai scan container --image nginx:latest --policies-file custom_policies.yaml
+# Generate detailed report
+secauditai container scan image:tag --output container_report.html
+```
+
+### Compliance Checks
+
+```bash
+# Run CIS benchmark check
+secauditai compliance check aws --framework cis
+
+# Run PCI-DSS compliance check
+secauditai compliance check azure --framework pci
+
+# Run HIPAA compliance check
+secauditai compliance check gcp --framework hipaa
+
+# Generate compliance report
+secauditai compliance report --framework cis --output compliance_report.html
+```
+
+## Report Generation
+
+### Report Types
+
+1. **HTML Reports**
+   - Interactive dashboards
+   - Detailed findings
+   - Remediation steps
+   - Export to PDF
+
+2. **PDF Reports**
+   - Executive summary
+   - Technical details
+   - Compliance status
+   - Action items
+
+3. **Markdown Reports**
+   - Version control friendly
+   - Easy to edit
+   - GitHub compatible
+   - Export to other formats
+
+### Report Customization
+
+```bash
+# Generate HTML report
+secauditai report generate scan_results.json --format html
+
+# Generate PDF report
+secauditai report generate scan_results.json --format pdf
+
+# Generate markdown report
+secauditai report generate scan_results.json --format markdown
+
+# Customize report template
+secauditai report generate scan_results.json --template custom_template.html
+```
+
+### Report Management
+
+```bash
+# List all reports
+secauditai report list
+
+# View specific report
+secauditai report view report_id
+
+# Delete report
+secauditai report delete report_id
+
+# Export report
+secauditai report export report_id --format pdf
+```
+
+## Development
+
+### Using Docker
+
+1. Start the development container:
+```bash
+docker-compose up -d
+```
+
+2. Access the container shell:
+```bash
+docker-compose exec secauditai bash
+```
+
+3. Run tests:
+```bash
+pytest tests/
+```
+
+4. Run specific tests:
+```bash
+pytest tests/test_code_scanner.py
+```
+
+### Manual Development
+
+1. Activate the virtual environment:
+```bash
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+2. Run tests:
+```bash
+pytest tests/
+```
+
+3. Run specific tests:
+```bash
+pytest tests/test_code_scanner.py
+```
+
+## Quick Start
+
+```bash
+# Scan a code repository
+secauditai scan code /path/to/repo
+
+# Scan AWS infrastructure
+secauditai scan aws --profile default
+
+# Scan Azure infrastructure
+secauditai scan azure --subscription-id <id>
+
+# Scan GCP infrastructure
+secauditai scan gcp --project-id <id>
+
+# Scan Kubernetes cluster
+secauditai scan k8s --context <context>
+
+# Generate SBOM
+secauditai sbom generate /path/to/project
+
+# Run compliance check
+secauditai compliance check aws --framework cis
+
+# Monitor for security issues
+secauditai monitor start --config monitoring.yaml
+```
+
+## Usage
+
+### Code Security Scanning
+
+```bash
+# Basic code scan
+secauditai scan code /path/to/repo
+
+# Scan with specific languages
+secauditai scan code /path/to/repo --languages python,javascript
+
+# Scan with custom rules
+secauditai scan code /path/to/repo --rules custom_rules.yaml
+
+# Generate detailed report
+secauditai scan code /path/to/repo --output report.html
+```
+
+### Cloud Infrastructure Scanning
+
+#### AWS
+```bash
+# Basic AWS scan
+secauditai scan aws --profile default
+
+# Scan specific services
+secauditai scan aws --services ec2,s3,iam
+
+# Scan with compliance framework
+secauditai scan aws --compliance cis
+
+# Generate detailed report
+secauditai scan aws --output aws_report.html
+```
+
+#### Azure
+```bash
+# Basic Azure scan
+secauditai scan azure --subscription-id <id>
+
+# Scan specific resource groups
+secauditai scan azure --resource-groups rg1,rg2
+
+# Scan with compliance framework
+secauditai scan azure --compliance nist
+
+# Generate detailed report
+secauditai scan azure --output azure_report.html
+```
+
+#### GCP
+```bash
+# Basic GCP scan
+secauditai scan gcp --project-id <id>
+
+# Scan specific services
+secauditai scan gcp --services compute,storage,iam
+
+# Scan with compliance framework
+secauditai scan gcp --compliance iso27001
+
+# Generate detailed report
+secauditai scan gcp --output gcp_report.html
+```
+
+### Kubernetes Security
+
+```bash
+# Basic Kubernetes scan
+secauditai scan k8s --context <context>
+
+# Scan specific namespaces
+secauditai scan k8s --namespaces default,kube-system
+
+# Scan with compliance framework
+secauditai scan k8s --compliance cis
+
+# Generate detailed report
+secauditai scan k8s --output k8s_report.html
+```
+
+### SBOM Analysis
+
+```bash
+# Generate SBOM
+secauditai sbom generate /path/to/project
+
+# Analyze SBOM for vulnerabilities
+secauditai sbom analyze sbom.json
+
+# Export SBOM in different formats
+secauditai sbom export sbom.json --format spdx,cyclonedx
+
+# Generate detailed report
+secauditai sbom report sbom.json --output sbom_report.html
+```
+
+### Container Security
+
+```bash
+# Scan container image
+secauditai container scan image:tag
+
+# Scan container runtime
+secauditai container scan runtime
+
+# Scan with specific checks
+secauditai container scan image:tag --checks vuln,config
+
+# Generate detailed report
+secauditai container scan image:tag --output container_report.html
+```
+
+### Compliance Checks
+
+```bash
+# Run CIS benchmark check
+secauditai compliance check aws --framework cis
+
+# Run PCI-DSS compliance check
+secauditai compliance check azure --framework pci
+
+# Run HIPAA compliance check
+secauditai compliance check gcp --framework hipaa
+
+# Generate compliance report
+secauditai compliance report --framework cis --output compliance_report.html
 ```
 
 ### Report Generation
 
-SecAuditAI supports generating reports in multiple formats (JSON, HTML, PDF) for different types of scans. Here's how to generate reports for specific scan types:
-
-#### AWS Security Report
 ```bash
-# Generate JSON report
-secauditai scan aws --profile default --region us-east-1 --output-format json --output-file aws_report.json
-
-# Generate HTML report with custom template
-secauditai scan aws --profile default --region us-east-1 --output-format html --output-file aws_report.html --template custom_aws_template.html
+# Generate HTML report
+secauditai report generate scan_results.json --format html
 
 # Generate PDF report
-secauditai scan aws --profile default --region us-east-1 --output-format pdf --output-file aws_report.pdf
+secauditai report generate scan_results.json --format pdf
 
-# Generate compliance report
-secauditai scan aws --profile default --region us-east-1 --compliance cis --output-format pdf --output-file aws_cis_report.pdf
+# Generate markdown report
+secauditai report generate scan_results.json --format markdown
+
+# Customize report template
+secauditai report generate scan_results.json --template custom_template.html
 ```
 
-#### Kubernetes Security Report
+### Report Management
+
 ```bash
-# Generate JSON report
-secauditai scan kubernetes --cluster my-cluster --output-format json --output-file k8s_report.json
-
-# Generate HTML report with namespace filter
-secauditai scan kubernetes --cluster my-cluster --namespace default --output-format html --output-file k8s_report.html
-
-# Generate PDF report with specific checks
-secauditai scan kubernetes --cluster my-cluster --checks pods,services --output-format pdf --output-file k8s_report.pdf
-```
-
-#### Code Security Report
-```bash
-# Generate JSON report for Python code
-secauditai scan code --path /path/to/project --language python --output-format json --output-file code_report.json
-
-# Generate HTML report with AI analysis
-secauditai scan code --path /path/to/project --language python --enable-ai --output-format html --output-file code_report.html
-
-# Generate PDF report with specific checks
-secauditai scan code --path /path/to/project --language python --checks sql-injection,xss --output-format pdf --output-file code_report.pdf
-```
-
-#### SBOM Analysis Report
-```bash
-# Generate JSON report with vulnerability data
-secauditai scan sbom --path /path/to/project --check-vulnerabilities --output-format json --output-file sbom_report.json
-
-# Generate HTML report with dependency tree
-secauditai scan sbom --path /path/to/project --generate-tree --output-format html --output-file sbom_report.html
-
-# Generate PDF report with license compliance
-secauditai scan sbom --path /path/to/project --check-licenses --output-format pdf --output-file sbom_report.pdf
-```
-
-#### Container Security Report
-```bash
-# Generate JSON report
-secauditai scan container --image nginx:latest --output-format json --output-file container_report.json
-
-# Generate HTML report with specific checks
-secauditai scan container --image nginx:latest --checks vulnerabilities,config --output-format html --output-file container_report.html
-
-# Generate PDF report with custom policies
-secauditai scan container --image nginx:latest --policies-file security_policies.yaml --output-format pdf --output-file container_report.pdf
-```
-
-#### Report Management
-```bash
-# List all available reports
+# List all reports
 secauditai report list
 
-# Show details of a specific report
-secauditai report show <report-id>
+# View specific report
+secauditai report view report_id
 
-# Delete a report
-secauditai report delete <report-id>
+# Delete report
+secauditai report delete report_id
 
-# Export report to different format
-secauditai report export <report-id> --format <new-format> --output <new-file>
-```
-
-#### Report Templates
-SecAuditAI comes with built-in templates for different report types, but you can also use custom templates:
-
-```bash
-# List available templates
-secauditai report templates list
-
-# Use custom template for HTML report
-secauditai scan aws --profile default --output-format html --template /path/to/custom_template.html
-
-# Generate report with specific sections
-secauditai scan aws --profile default --output-format html --sections summary,findings,recommendations
-```
-
-#### Report Configuration
-```bash
-# Set default report format
-secauditai config set report.default_format html
-
-# Set default output directory
-secauditai config set report.output_dir /path/to/reports
-
-# Configure report sections
-secauditai config set report.sections summary,findings,recommendations,metadata
-
-# Set report styling
-secauditai config set report.style dark
-```
-
-#### Report Examples
-
-1. **Comprehensive AWS Security Report**
-```bash
-secauditai scan aws \
-  --profile default \
-  --region us-east-1 \
-  --compliance cis \
-  --output-format html \
-  --output-file aws_security_report.html \
-  --sections summary,findings,recommendations,compliance \
-  --style dark
-```
-
-2. **Detailed Code Security Report with AI Analysis**
-```bash
-secauditai scan code \
-  --path /path/to/project \
-  --language python \
-  --enable-ai \
-  --output-format pdf \
-  --output-file code_security_report.pdf \
-  --sections summary,findings,ai_analysis,recommendations \
-  --template custom_code_template.html
-```
-
-3. **SBOM Report with Vulnerability Data**
-```bash
-secauditai scan sbom \
-  --path /path/to/project \
-  --check-vulnerabilities \
-  --check-licenses \
-  --generate-tree \
-  --output-format json \
-  --output-file sbom_analysis.json \
-  --include-dependencies \
-  --include-vulnerabilities \
-  --include-licenses
+# Export report
+secauditai report export report_id --format pdf
 ```
 
 ### Configuration
 
 ```bash
-# Show current configuration
-secauditai config show
+# Initialize configuration
+secauditai config init
 
-# Set configuration values
-secauditai config set <key> <value>
+# Set configuration value
+secauditai config set key value
 
-# Example: Set notification settings
-secauditai config set notifications.slack.webhook_url <url>
-secauditai config set notifications.email.smtp_server <server>
+# Get configuration value
+secauditai config get key
 
-# Example: Set AI settings
-secauditai config set ai.provider ollama
-secauditai config set ai.model codebert
+# List all configurations
+secauditai config list
+
+# Reset configuration
+secauditai config reset
 ```
 
 ### Monitoring
 
 ```bash
 # Start monitoring
-secauditai monitor start
-
-# Configure monitoring
-secauditai monitor config --interval 300 --notifications slack,email
+secauditai monitor start --config monitoring.yaml
 
 # Stop monitoring
 secauditai monitor stop
+
+# View monitoring status
+secauditai monitor status
+
+# Configure alerts
+secauditai monitor config alerts --slack webhook_url
 ```
 
-### Advanced Usage
+## Advanced Usage
 
-#### Custom Checks
+### Custom Rules
+
+Create custom security rules in YAML format:
+
+```yaml
+rules:
+  - id: custom-001
+    name: Custom Security Check
+    description: Check for custom security requirement
+    severity: high
+    language: python
+    pattern: |
+      def unsafe_function():
+        pass
+```
+
+### API Integration
+
+```python
+from secauditai import SecAuditAI
+
+# Initialize client
+client = SecAuditAI()
+
+# Scan code
+results = client.scan_code("/path/to/repo")
+
+# Scan cloud infrastructure
+results = client.scan_cloud("aws", profile="default")
+
+# Generate report
+report = client.generate_report(results, format="html")
+```
+
+### Webhook Integration
+
+Configure webhooks in `config.yaml`:
+
+```yaml
+webhooks:
+  - url: https://api.example.com/webhook
+    events:
+      - scan_completed
+      - high_severity_finding
+```
+
+## Common Examples
+
+### Basic Code Scan
 ```bash
-# Add custom check
-secauditai checks add --name custom_check --path /path/to/check.py
-
-# List available checks
-secauditai checks list
-
-# Enable/disable checks
-secauditai checks enable custom_check
-secauditai checks disable custom_check
+secauditai scan code /path/to/repo --languages python,javascript --output report.html
 ```
 
-#### Plugin Management
+### Cloud Infrastructure Scan
 ```bash
-# List installed plugins
-secauditai plugins list
-
-# Install plugin
-secauditai plugins install <plugin-name>
-
-# Remove plugin
-secauditai plugins remove <plugin-name>
+secauditai scan aws --profile default --services ec2,s3,iam --compliance cis
 ```
 
-#### Compliance Frameworks
+### Kubernetes Security Scan
 ```bash
-# List supported frameworks
-secauditai compliance list
-
-# Generate compliance report
-secauditai compliance generate --framework cis --provider aws
-
-# Check compliance status
-secauditai compliance check --framework cis --provider aws
+secauditai scan k8s --context production --namespaces default,kube-system
 ```
 
-### Environment Variables
-
+### SBOM Generation and Analysis
 ```bash
-# Set API keys
-export SECAUDITAI_AWS_ACCESS_KEY_ID=<key>
-export SECAUDITAI_AWS_SECRET_ACCESS_KEY=<secret>
-export SECAUDITAI_AZURE_CLIENT_ID=<id>
-export SECAUDITAI_AZURE_CLIENT_SECRET=<secret>
-export SECAUDITAI_GCP_CREDENTIALS=<path>
-
-# Set notification settings
-export SECAUDITAI_SLACK_WEBHOOK_URL=<url>
-export SECAUDITAI_EMAIL_SMTP_SERVER=<server>
+secauditai sbom generate /path/to/project --output sbom.json
+secauditai sbom analyze sbom.json --output vulnerabilities.html
 ```
 
-### Common Examples
-
-1. **Full AWS Security Assessment with AI Analysis**
+### Container Security Scan
 ```bash
-secauditai scan aws \
-  --profile default \
-  --region us-east-1 \
-  --compliance cis \
-  --enable-ai \
-  --output-format html \
-  --output-file aws_security_report.html
+secauditai container scan myapp:latest --checks vuln,config --output container_report.html
 ```
 
-2. **Code Security Scan with Custom Rules**
+### Compliance Check
 ```bash
-secauditai scan code \
-  --path /path/to/project \
-  --language python \
-  --enable-ai \
-  --checks all \
-  --rules-file custom_rules.yaml \
-  --output-format json
+secauditai compliance check aws --framework cis --output compliance_report.html
 ```
-
-3. **Container Security Assessment with Policies**
-```bash
-secauditai scan container \
-  --image nginx:latest \
-  --checks vulnerabilities,config,secrets \
-  --policies-file security_policies.yaml \
-  --output-format pdf
-```
-
-4. **Continuous Monitoring Setup**
-```bash
-# Configure monitoring
-secauditai monitor config \
-  --interval 300 \
-  --notifications slack,email \
-  --checks high,medium
-
-# Start monitoring
-secauditai monitor start
-```
-
-5. **Compliance Report Generation**
-```bash
-secauditai compliance generate \
-  --framework cis \
-  --provider aws \
-  --format pdf \
-  --output aws-cis-report.pdf
-```
-
-For more detailed information about specific commands and options, use:
-```bash
-secauditai <command> --help
-```
-
-## Development
-
-### Setting up Development Environment
-
-1. **Clone the repository**:
-```bash
-git clone https://github.com/Parthasarathi7722/secauditai.git
-cd secauditai
-```
-
-2. **Create and activate virtual environment**:
-```bash
-# On Windows
-python -m venv venv
-.\venv\Scripts\activate
-
-# On Linux/macOS
-python -m venv venv
-source venv/bin/activate
-```
-
-3. **Install development dependencies**:
-```bash
-pip install -e ".[dev]"
-```
-
-4. **Install pre-commit hooks**:
-```bash
-pre-commit install
-```
-
-5. **Run tests**:
-```bash
-pytest
-```
-
-### Development Guidelines
-
-1. **Code Style**:
-   - Follow PEP 8 for Python code
-   - Use type hints for all function parameters and return values
-   - Document all public functions and classes with docstrings
-   - Keep functions small and focused on a single responsibility
-
-2. **Testing**:
-   - Write unit tests for all new features
-   - Maintain test coverage above 90%
-   - Use pytest for testing
-   - Include integration tests for complex features
-
-3. **Documentation**:
-   - Update README.md for new features
-   - Add docstrings to all new code
-   - Update API documentation
-   - Include usage examples
-
-4. **Version Control**:
-   - Use meaningful commit messages
-   - Create feature branches for new work
-   - Submit pull requests for review
-   - Keep the main branch stable
-
-### Project Structure
-```
-secauditai/
-├── secauditai/              # Main package
-│   ├── core/               # Core functionality
-│   ├── plugins/            # Scanner plugins
-│   ├── templates/          # Report templates
-│   └── utils/              # Utility functions
-├── tests/                  # Test suite
-├── docs/                   # Documentation
-├── examples/               # Usage examples
-└── scripts/                # Development scripts
-```
-
-## Contributing
-
-We welcome contributions from the community! Here's how you can help:
-
-1. **Report Issues**:
-   - Check existing issues before creating new ones
-   - Provide detailed information about the problem
-   - Include steps to reproduce the issue
-
-2. **Submit Pull Requests**:
-   - Fork the repository
-   - Create a feature branch
-   - Make your changes
-   - Submit a pull request with a clear description
-
-3. **Code Review**:
-   - Review open pull requests
-   - Provide constructive feedback
-   - Help maintain code quality
-
-4. **Documentation**:
-   - Improve existing documentation
-   - Add examples and tutorials
-   - Fix typos and errors
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Installation Problems**:
-   - Ensure Python 3.8+ is installed
-   - Check virtual environment setup
-   - Verify all dependencies are installed
-
-2. **Scanner Issues**:
-   - Check scanner configuration
-   - Verify required permissions
-   - Ensure target is accessible
-
-3. **Report Generation**:
-   - Check template files
-   - Verify output directory permissions
-   - Ensure required dependencies are installed
-
-4. **AI Analysis**:
-   - Check model availability
-   - Verify API keys and credentials
-   - Ensure sufficient resources
-
-### Getting Help
-
-- Check the [documentation](https://github.com/Parthasarathi7722/secauditai/docs)
-- Search [existing issues](https://github.com/Parthasarathi7722/secauditai/issues)
-- Join our [Discord community](https://discord.gg/secauditai)
-- Contact the maintainers
 
 ## License
 
-SecAuditAI is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Compliance Framework Scanning
-Perform comprehensive compliance checks for various frameworks:
-- **SOC-2**: Security, Availability, Processing Integrity, Confidentiality, and Privacy
-- **GDPR**: Data Protection, Rights, Security, and Accountability
-- **PCI-DSS**: Network Security, Data Protection, Access Control, Monitoring, and Maintenance
+## Contributing
 
-### Infrastructure as Code (IAC) Security
-Analyze infrastructure code for security best practices and compliance:
-- **Terraform**: Security, compliance, and best practices checks
-- **CloudFormation**: IAM, network security, and AWS best practices
-- **Kubernetes**: Pod security, RBAC, and container security
-- **Ansible**: Privilege escalation, sensitive data handling, and playbook security
-
-### Compliance Scanning
-
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests:
 ```bash
-# SOC-2 Compliance Check
-secauditai scan compliance --framework soc2 --target /path/to/config
-
-# GDPR Compliance Check
-secauditai scan compliance --framework gdpr --target /path/to/config
-
-# PCI-DSS Compliance Check
-secauditai scan compliance --framework pci-dss --target /path/to/config
-
-# Generate Compliance Report
-secauditai scan compliance --framework soc2 --target /path/to/config --output-format html --output-file compliance_report.html
+docker-compose run secauditai pytest tests/
 ```
+5. Submit a pull request
 
-### IAC Security Scanning
+## Roadmap
 
-```bash
-# Scan Terraform Configuration
-secauditai scan iac --target terraform.tf
-
-# Scan CloudFormation Template
-secauditai scan iac --target template.yaml
-
-# Scan Kubernetes Manifests
-secauditai scan iac --target k8s/
-
-# Scan Ansible Playbooks
-secauditai scan iac --target playbook.yml
-
-# Generate IAC Security Report
-secauditai scan iac --target /path/to/iac --output-format json --output-file iac_security_report.json
-```
+- [ ] Enhanced AI model training pipeline
+- [ ] Additional cloud provider support
+- [ ] Advanced container runtime security
+- [ ] Real-time security monitoring dashboard
+- [ ] Integration with CI/CD pipelines
+- [ ] Custom rule engine improvements
+- [ ] Advanced reporting capabilities
+- [ ] Performance optimizations
+- [ ] Additional compliance frameworks
+- [ ] Enhanced API security testing
+- [ ] Machine learning model improvements
+- [ ] Documentation improvements
+- [ ] Community contributions

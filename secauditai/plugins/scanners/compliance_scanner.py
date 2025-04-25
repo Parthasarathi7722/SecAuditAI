@@ -9,13 +9,20 @@ from ..base import BaseScanner
 logger = logging.getLogger(__name__)
 
 class ComplianceScanner(BaseScanner):
-    """Scanner for compliance frameworks (SOC-2, GDPR, PCI-DSS)"""
+    """Scanner for compliance checks against cloud infrastructure and data centers."""
     
     def __init__(self):
         super().__init__()
         self.name = "compliance"
         self.description = "Compliance framework scanner"
-        self.supported_frameworks = ["soc2", "gdpr", "pci-dss"]
+        self.supported_frameworks = {
+            "cis": "Center for Internet Security",
+            "pci": "Payment Card Industry",
+            "hipaa": "Health Insurance Portability and Accountability Act",
+            "nist": "National Institute of Standards and Technology",
+            "iso27001": "ISO/IEC 27001"
+        }
+        self.supported_targets = ["aws", "azure", "gcp", "onprem"]
         self._load_checks()
         self._setup_tools()
     
@@ -130,65 +137,200 @@ class ComplianceScanner(BaseScanner):
         
         return findings
     
-    def scan(self, target: str, framework: str, **kwargs) -> Dict[str, Any]:
+    def scan(self, target: str, framework: str, **kwargs) -> Dict:
         """
-        Perform compliance scan for specified framework using integrated tools
+        Perform compliance scan against specified target.
         
         Args:
-            target: Path to scan
-            framework: Compliance framework (soc2, gdpr, pci-dss)
-            **kwargs: Additional arguments
+            target: Target infrastructure (aws, azure, gcp, onprem)
+            framework: Compliance framework to check against
+            **kwargs: Additional parameters for specific targets
             
         Returns:
             Dict containing scan results
         """
+        if target not in self.supported_targets:
+            raise ValueError(f"Unsupported target: {target}. Must be one of {self.supported_targets}")
+            
         if framework not in self.supported_frameworks:
-            raise ValueError(f"Unsupported framework: {framework}")
-        
+            raise ValueError(f"Unsupported framework: {framework}. Must be one of {list(self.supported_frameworks.keys())}")
+
         try:
-            # Load configuration and data
-            config = self._load_config()
-            data = self._load_data(target)
-            
-            # Perform framework-specific checks using integrated tools
-            if framework == "soc2":
-                findings = self._check_soc2(data)
-            elif framework == "gdpr":
-                findings = self._check_gdpr(data)
-            else:  # pci-dss
-                findings = self._check_pci_dss(data)
-            
-            # Generate summary
-            summary = {
-                "framework": framework,
-                "total_requirements": len(findings),
-                "passed_requirements": len([f for f in findings if f["status"] == "pass"]),
-                "failed_requirements": len([f for f in findings if f["status"] == "fail"]),
-                "compliance_score": (len([f for f in findings if f["status"] == "pass"]) / len(findings)) * 100
-            }
-            
+            if target == "aws":
+                return self._scan_aws(framework, **kwargs)
+            elif target == "azure":
+                return self._scan_azure(framework, **kwargs)
+            elif target == "gcp":
+                return self._scan_gcp(framework, **kwargs)
+            else:
+                return self._scan_onprem(framework, **kwargs)
+        except Exception as e:
             return {
-                "success": True,
-                "summary": summary,
-                "findings": findings,
-                "metadata": {
-                    "scanner": self.name,
-                    "framework": framework,
-                    "timestamp": self._get_timestamp(),
-                    "tools_used": list(self.tools[framework].keys())
+                "error": str(e),
+                "summary": {
+                    "total_checks": 0,
+                    "passed": 0,
+                    "failed": 0,
+                    "not_applicable": 0
                 }
             }
+
+    def _scan_aws(self, framework: str, **kwargs) -> Dict:
+        """Perform compliance scan against AWS infrastructure."""
+        try:
+            # Use AWS Config for compliance checks
+            cmd = [
+                "aws", "configservice", "describe-compliance-by-config-rule",
+                "--config-rule-names", f"compliance-{framework}"
+            ]
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            
+            if result.returncode != 0:
+                raise RuntimeError(f"AWS Config error: {result.stderr}")
+                
+            compliance_data = json.loads(result.stdout)
+            return self._format_aws_results(compliance_data)
             
         except Exception as e:
-            logger.error(f"Compliance scan failed: {str(e)}")
-            return {
-                "success": False,
-                "error": str(e),
-                "summary": None,
-                "findings": [],
-                "metadata": {
-                    "scanner": self.name,
-                    "framework": framework,
-                    "timestamp": self._get_timestamp()
-                }
-            } 
+            raise RuntimeError(f"Failed to scan AWS compliance: {str(e)}")
+
+    def _scan_azure(self, framework: str, **kwargs) -> Dict:
+        """Perform compliance scan against Azure infrastructure."""
+        try:
+            # Use Azure Policy for compliance checks
+            cmd = [
+                "az", "policy", "state", "list",
+                "--policy-set-definition", f"compliance-{framework}"
+            ]
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            
+            if result.returncode != 0:
+                raise RuntimeError(f"Azure Policy error: {result.stderr}")
+                
+            compliance_data = json.loads(result.stdout)
+            return self._format_azure_results(compliance_data)
+            
+        except Exception as e:
+            raise RuntimeError(f"Failed to scan Azure compliance: {str(e)}")
+
+    def _scan_gcp(self, framework: str, **kwargs) -> Dict:
+        """Perform compliance scan against GCP infrastructure."""
+        try:
+            # Use GCP Security Command Center for compliance checks
+            cmd = [
+                "gcloud", "scc", "findings", "list",
+                "--filter", f"compliance_standard={framework}"
+            ]
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            
+            if result.returncode != 0:
+                raise RuntimeError(f"GCP SCC error: {result.stderr}")
+                
+            compliance_data = json.loads(result.stdout)
+            return self._format_gcp_results(compliance_data)
+            
+        except Exception as e:
+            raise RuntimeError(f"Failed to scan GCP compliance: {str(e)}")
+
+    def _scan_onprem(self, framework: str, **kwargs) -> Dict:
+        """Perform compliance scan against on-premises infrastructure."""
+        try:
+            # Use OpenSCAP for on-premises compliance checks
+            cmd = [
+                "oscap", "xccdf", "eval",
+                f"--profile {framework}",
+                "/usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml"
+            ]
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            
+            if result.returncode != 0:
+                raise RuntimeError(f"OpenSCAP error: {result.stderr}")
+                
+            return self._format_onprem_results(result.stdout)
+            
+        except Exception as e:
+            raise RuntimeError(f"Failed to scan on-premises compliance: {str(e)}")
+
+    def _format_aws_results(self, data: Dict) -> Dict:
+        """Format AWS compliance results."""
+        findings = []
+        for item in data.get("ComplianceByConfigRules", []):
+            findings.append({
+                "rule_id": item.get("ConfigRuleName", ""),
+                "status": item.get("Compliance", {}).get("ComplianceType", "UNKNOWN"),
+                "resource_type": item.get("Compliance", {}).get("ResourceType", ""),
+                "resource_id": item.get("Compliance", {}).get("ResourceId", ""),
+                "severity": "high" if item.get("Compliance", {}).get("ComplianceType") == "NON_COMPLIANT" else "low"
+            })
+            
+        return {
+            "findings": findings,
+            "summary": self._generate_summary(findings)
+        }
+
+    def _format_azure_results(self, data: Dict) -> Dict:
+        """Format Azure compliance results."""
+        findings = []
+        for item in data:
+            findings.append({
+                "rule_id": item.get("policyDefinitionName", ""),
+                "status": item.get("complianceState", "UNKNOWN"),
+                "resource_type": item.get("resourceType", ""),
+                "resource_id": item.get("resourceId", ""),
+                "severity": "high" if item.get("complianceState") == "NonCompliant" else "low"
+            })
+            
+        return {
+            "findings": findings,
+            "summary": self._generate_summary(findings)
+        }
+
+    def _format_gcp_results(self, data: Dict) -> Dict:
+        """Format GCP compliance results."""
+        findings = []
+        for item in data:
+            findings.append({
+                "rule_id": item.get("findingClass", ""),
+                "status": item.get("state", "UNKNOWN"),
+                "resource_type": item.get("resourceType", ""),
+                "resource_id": item.get("resourceName", ""),
+                "severity": item.get("severity", "low")
+            })
+            
+        return {
+            "findings": findings,
+            "summary": self._generate_summary(findings)
+        }
+
+    def _format_onprem_results(self, data: str) -> Dict:
+        """Format on-premises compliance results."""
+        findings = []
+        # Parse OpenSCAP output and format findings
+        # This is a simplified version - actual implementation would need to parse XML output
+        for line in data.split("\n"):
+            if "Rule Result" in line:
+                findings.append({
+                    "rule_id": line.split(":")[0].strip(),
+                    "status": "PASS" if "pass" in line.lower() else "FAIL",
+                    "severity": "high" if "fail" in line.lower() else "low"
+                })
+                
+        return {
+            "findings": findings,
+            "summary": self._generate_summary(findings)
+        }
+
+    def _generate_summary(self, findings: List[Dict]) -> Dict:
+        """Generate summary of compliance findings."""
+        total = len(findings)
+        passed = len([f for f in findings if f["status"] in ["PASS", "Compliant"]])
+        failed = len([f for f in findings if f["status"] in ["FAIL", "NonCompliant"]])
+        not_applicable = len([f for f in findings if f["status"] == "NotApplicable"])
+        
+        return {
+            "total_checks": total,
+            "passed": passed,
+            "failed": failed,
+            "not_applicable": not_applicable,
+            "compliance_score": (passed / (total - not_applicable)) * 100 if (total - not_applicable) > 0 else 0
+        } 
