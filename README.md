@@ -25,7 +25,7 @@ SecAuditAI is a comprehensive security auditing tool that leverages AI to perfor
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/SecAuditAI.git
+git clone https://github.com/Parthasarathi7722/SecAuditAI.git
 cd SecAuditAI
 ```
 
@@ -55,7 +55,7 @@ docker-compose up
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/SecAuditAI.git
+git clone https://github.com/Parthasarathi7722/SecAuditAI.git
 cd SecAuditAI
 ```
 
