@@ -25,7 +25,7 @@ SecAuditAI is a comprehensive security auditing tool that leverages AI to perfor
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/SecAuditAI.git
+git clone https://github.com/SecAuditAI/SecAuditAI.git
 cd SecAuditAI
 ```
 
@@ -55,7 +55,7 @@ docker-compose up
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/SecAuditAI.git
+git clone https://github.com/SecAuditAI/SecAuditAI.git
 cd SecAuditAI
 ```
 
@@ -80,6 +80,138 @@ pip install -r requirements-dev.txt
 ```bash
 pip install -e .
 ```
+
+## Underlying Tools and Dependencies
+
+SecAuditAI leverages several powerful open-source tools for its security analysis capabilities. Here's a list of the core tools and how to install them manually if needed:
+
+### Core Tools
+
+1. **Tree-sitter** - For advanced code parsing and analysis
+   - Official Page: [https://tree-sitter.github.io/tree-sitter/](https://tree-sitter.github.io/tree-sitter/)
+   - Manual Installation:
+   ```bash
+   # Install build dependencies
+   sudo apt-get update
+   sudo apt-get install build-essential nodejs npm
+
+   # Install tree-sitter
+   npm install -g tree-sitter-cli
+   ```
+
+2. **Trivy** - For container and vulnerability scanning
+   - Official Page: [https://github.com/aquasecurity/trivy](https://github.com/aquasecurity/trivy)
+   - Manual Installation:
+   ```bash
+   # Download and install
+   curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+   ```
+
+3. **Terraform** - For Infrastructure as Code analysis
+   - Official Page: [https://www.terraform.io/](https://www.terraform.io/)
+   - Manual Installation:
+   ```bash
+   # Download and install
+   wget https://releases.hashicorp.com/terraform/1.5.0/terraform_1.5.0_linux_amd64.zip
+   unzip terraform_1.5.0_linux_amd64.zip
+   sudo mv terraform /usr/local/bin/
+   ```
+
+4. **AWS CLI** - For AWS infrastructure scanning
+   - Official Page: [https://aws.amazon.com/cli/](https://aws.amazon.com/cli/)
+   - Manual Installation:
+   ```bash
+   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+   unzip awscliv2.zip
+   sudo ./aws/install
+   ```
+
+5. **Azure CLI** - For Azure infrastructure scanning
+   - Official Page: [https://docs.microsoft.com/en-us/cli/azure/](https://docs.microsoft.com/en-us/cli/azure/)
+   - Manual Installation:
+   ```bash
+   curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+   ```
+
+6. **gcloud CLI** - For GCP infrastructure scanning
+   - Official Page: [https://cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install)
+   - Manual Installation:
+   ```bash
+   # Add the Cloud SDK distribution URI as a package source
+   echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+
+   # Import the Google Cloud public key
+   curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+
+   # Update and install the Cloud SDK
+   sudo apt-get update && sudo apt-get install google-cloud-sdk
+   ```
+
+### Troubleshooting Tool Installation
+
+If you encounter issues during the automatic installation of these tools, you can:
+
+1. Install them manually using the commands above
+2. Set the following environment variables to point to your manual installations:
+   ```bash
+   export SECAUDITAI_TREE_SITTER_PATH=/path/to/tree-sitter
+   export SECAUDITAI_TRIVY_PATH=/path/to/trivy
+   export SECAUDITAI_TERRAFORM_PATH=/path/to/terraform
+   export SECAUDITAI_AWS_CLI_PATH=/path/to/aws
+   export SECAUDITAI_AZURE_CLI_PATH=/path/to/az
+   export SECAUDITAI_GCLOUD_PATH=/path/to/gcloud
+   ```
+
+3. Verify the installations:
+   ```bash
+   # Check tool versions
+   tree-sitter --version
+   trivy --version
+   terraform --version
+   aws --version
+   az --version
+   gcloud --version
+   ```
+
+### Common Issues and Solutions
+
+1. **Tree-sitter Installation Issues**
+   - Problem: Missing Node.js or npm
+   - Solution: Install Node.js and npm first:
+   ```bash
+   curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+   sudo apt-get install -y nodejs
+   ```
+
+2. **Trivy Permission Issues**
+   - Problem: Cannot access Docker socket
+   - Solution: Add user to docker group:
+   ```bash
+   sudo usermod -aG docker $USER
+   ```
+
+3. **Cloud CLI Authentication Issues**
+   - Problem: Credentials not found
+   - Solution: Configure credentials manually:
+   ```bash
+   # AWS
+   aws configure
+   
+   # Azure
+   az login
+   
+   # GCP
+   gcloud auth login
+   ```
+
+4. **Terraform State Issues**
+   - Problem: State file not found
+   - Solution: Initialize Terraform:
+   ```bash
+   terraform init
+   ```
+
+For more detailed troubleshooting, refer to the [Troubleshooting Guide](docs/troubleshooting.md).
 
 ## Quick Start
 
