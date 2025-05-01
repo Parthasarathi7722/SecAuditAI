@@ -1,0 +1,145 @@
+# SecAuditAI Configuration Example
+
+# API Configuration
+api:
+  key: "your-api-key"  # Required
+  base_url: "https://api.secauditai.com"
+  timeout: 30  # seconds
+  retries: 3
+
+# Database Configuration
+database:
+  url: "postgresql://user:password@localhost:5432/secauditai"  # Required
+  pool_size: 5
+  max_overflow: 10
+  echo: false
+
+# Logging Configuration
+logging:
+  level: "INFO"  # Required
+  file: "/var/log/secauditai/app.log"
+  max_size: 10485760  # 10MB
+  backup_count: 5
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Security Configuration
+security:
+  encryption_key: "your-encryption-key"  # Required
+  jwt_secret: "your-jwt-secret"  # Required
+  hmac_key: "your-hmac-key"  # Required
+  session_timeout: "1h"
+  password_hash_rounds: 12
+
+# Credential Management
+credentials:
+  backend: "local"  # local, vault, aws_secrets, azure_keyvault
+  rotation_interval: "24h"
+  vault:
+    url: "https://vault.example.com"
+    token: "your-vault-token"
+  aws:
+    region: "us-east-1"
+    profile: "default"
+  azure:
+    vault_url: "https://your-keyvault.vault.azure.net/"
+    tenant_id: "your-tenant-id"
+
+# Access Control
+access_control:
+  roles:
+    - admin
+    - auditor
+    - user
+  permissions:
+    admin:
+      - "*"
+    auditor:
+      - "read:*"
+      - "scan:*"
+      - "report:*"
+    user:
+      - "read:own"
+      - "scan:own"
+
+# Monitoring Configuration
+monitoring:
+  enabled: true
+  interval: "5m"
+  metrics:
+    enabled: true
+    port: 9090
+  alerts:
+    enabled: true
+    providers:
+      - type: "email"
+        smtp_host: "smtp.example.com"
+        smtp_port: 587
+        username: "your-email@example.com"
+        password: "your-email-password"
+      - type: "slack"
+        webhook_url: "https://hooks.slack.com/services/your/webhook"
+      - type: "webhook"
+        url: "https://your-webhook-url.com"
+        secret: "your-webhook-secret"
+
+# Scanner Configuration
+scanner:
+  timeout: 300  # seconds
+  max_concurrent: 5
+  exclude_patterns:
+    - "*.log"
+    - "*.tmp"
+    - "node_modules/"
+    - "venv/"
+  include_patterns:
+    - "*.py"
+    - "*.js"
+    - "*.java"
+    - "*.go"
+
+# Compliance Configuration
+compliance:
+  frameworks:
+    - "pci-dss"
+    - "hipaa"
+    - "gdpr"
+    - "iso27001"
+  reporting:
+    format: "pdf"
+    template: "default"
+    output_dir: "/var/reports"
+
+# Network Configuration
+network:
+  proxy:
+    enabled: false
+    url: "http://proxy.example.com:8080"
+    username: "proxy-user"
+    password: "proxy-password"
+  ssl_verify: true
+  timeout: 30  # seconds
+
+# Cache Configuration
+cache:
+  enabled: true
+  backend: "redis"
+  redis:
+    host: "localhost"
+    port: 6379
+    password: "your-redis-password"
+    db: 0
+  ttl: 3600  # seconds
+
+# Backup Configuration
+backup:
+  enabled: true
+  schedule: "0 0 * * *"  # Daily at midnight
+  retention: 7  # days
+  location: "/var/backups/secauditai"
+  encryption: true
+
+# Update Configuration
+update:
+  check_interval: "24h"
+  auto_update: false
+  channel: "stable"  # stable, beta, alpha 

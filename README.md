@@ -1,134 +1,79 @@
 # SecAuditAI
 
-SecAuditAI is a comprehensive security auditing tool that leverages AI to perform automated security assessments across various domains including cloud infrastructure, code analysis, and vulnerability detection.
-
-**Note:** This is an experimental tool, and some features, particularly zero-day vulnerability detection, are under active development and should be used with caution in production environments.
-
-## Table of Contents
-
-- [Features](#features)
-- [Experimental Features](#experimental-features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Underlying Tools](#underlying-tools)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
-- [License](#license)
-- [Roadmap](#roadmap)
-- [Support](#support)
+A comprehensive security audit and compliance automation tool powered by AI, designed to help organizations maintain robust security postures and meet compliance requirements.
 
 ## Features
 
-- **AI-Powered Code Analysis**: Advanced static code analysis using Tree-sitter and custom vulnerability detection models
-- **Cloud Security Scanning**: Comprehensive security assessment for AWS, Azure, and GCP environments using Prowler and native cloud security tools
-- **SBOM Vulnerability Detection**: Automated Software Bill of Materials analysis and vulnerability scanning
-- **Modular Plugin Architecture**: Extensible design allowing easy addition of new scanners and analyzers
-- **Comprehensive Reporting**: Detailed security reports with actionable insights and remediation steps
-- **Real-time Analysis**: Continuous monitoring and alerting capabilities
-- **Zero-Day Vulnerability Detection** (Experimental): Advanced AI models for detecting unknown vulnerabilities
-- **Container Security**: Comprehensive container image scanning and runtime security monitoring
-- **Infrastructure as Code Security**: Automated security checks for Terraform, CloudFormation, and ARM templates
-- **API Security Testing**: Automated API security testing and vulnerability detection
-- **Custom Rule Engine**: Support for custom security rules and policies
-- **Integration Support**: Slack notifications and webhook integrations for alerts
+- **Automated Security Scanning**
+  - Code analysis and vulnerability detection
+  - Infrastructure security assessment
+  - Network security scanning
+  - Container security analysis
+  - Cloud security posture management
+  - **Infrastructure as Code (IaC) Security**
+    - Terraform security scanning
+    - CloudFormation template analysis
+    - Kubernetes manifest validation
+    - Ansible playbook security checks
+    - Multi-cloud IaC security assessment
 
-## Experimental Features
+- **AI-Powered Analysis**
+  - Intelligent vulnerability prioritization
+  - Automated remediation suggestions
+  - Pattern recognition for security issues
+  - Risk assessment and scoring
+  - Threat intelligence integration
 
-The following features are marked as experimental and should be used with caution:
+- **Security Management**
+  - Secure credential management with multiple backends
+  - Role-based access control (RBAC)
+  - Encrypted logging and audit trails
+  - Secure configuration management
+  - Automated security reporting
 
-### 1. Zero-Day Vulnerability Detection
-- **Status**: Beta
-- **Known Limitations**:
-  - May produce false positives
-  - Requires significant computational resources
-  - Limited to specific programming languages
-- **Usage Guidelines**:
-  ```bash
-  # Enable experimental features
-  export SECAUDITAI_EXPERIMENTAL=true
-  
-  # Run with caution
-  secauditai scan --experimental --zero-day
-  ```
+## Underlying Tools
 
-### 2. Advanced AI Model Training
-- **Status**: Alpha
-- **Known Limitations**:
-  - Training data requirements
-  - Model accuracy variations
-  - Resource intensive
-- **Usage Guidelines**:
-  ```bash
-  # Enable model training
-  secauditai train --experimental --model custom
-  ```
+SecAuditAI integrates with several industry-standard security tools:
 
-### 3. Real-time Security Monitoring
-- **Status**: Beta
-- **Known Limitations**:
-  - High resource usage
-  - Network overhead
-  - Alert fatigue potential
-- **Usage Guidelines**:
-  ```bash
-  # Enable real-time monitoring
-  secauditai monitor --experimental --real-time
-  ```
+- **Static Analysis**
+  - Bandit (Python security)
+  - Semgrep (Multi-language analysis)
+  - SonarQube (Code quality and security)
+  - Checkov (Infrastructure as Code)
 
-### Experimental Feature Support
+- **Dynamic Analysis**
+  - OWASP ZAP (Web application security)
+  - Nmap (Network scanning)
+  - Nikto (Web server scanning)
+  - OpenVAS (Vulnerability assessment)
 
-For experimental features, we provide:
-- Limited support through GitHub issues
-- Community-driven development
-- Regular updates and improvements
-- Feedback collection mechanism
+- **Container Security**
+  - Trivy (Container vulnerability scanning)
+  - Clair (Container image analysis)
+  - Anchore (Container security platform)
 
-To report issues with experimental features:
-```bash
-secauditai feedback --experimental --feature zero-day --issue "description"
-```
+- **Cloud Security**
+  - Prowler (AWS security assessment)
+  - Scout Suite (Multi-cloud security auditing)
+  - CloudSploit (Cloud security monitoring)
+
+- **Infrastructure as Code Security**
+  - Checkov (Terraform, CloudFormation, Kubernetes)
+  - TFLint (Terraform best practices)
+  - cfn-nag (CloudFormation security)
+  - kube-bench (Kubernetes CIS benchmarks)
+  - kube-hunter (Kubernetes penetration testing)
+  - ansible-lint (Ansible security)
 
 ## Installation
 
-### Using Docker (Recommended)
-
 1. Clone the repository:
 ```bash
-git clone https://github.com/Parthasarathi7722/SecAuditAI.git
-cd SecAuditAI
+git clone https://github.com/yourusername/secauditai.git
+cd secauditai
 ```
 
-2. Create a `.env` file with your cloud credentials:
-```bash
-# AWS Credentials
-AWS_ACCESS_KEY_ID=your_aws_key
-AWS_SECRET_ACCESS_KEY=your_aws_secret
-AWS_DEFAULT_REGION=your_region
-
-# Azure Credentials
-AZURE_CLIENT_ID=your_azure_client_id
-AZURE_CLIENT_SECRET=your_azure_secret
-AZURE_TENANT_ID=your_azure_tenant_id
-
-# GCP Credentials
-GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
-```
-
-3. Build and run the Docker container:
-```bash
-docker-compose build
-docker-compose up
-```
-
-### Manual Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/Parthasarathi7722/SecAuditAI.git
-cd SecAuditAI
-```
-
-2. Create and activate virtual environment:
+2. Create and activate a virtual environment:
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
@@ -137,260 +82,263 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 3. Install dependencies:
 ```bash
 pip install -r requirements.txt
-pip install -r requirements-dev.txt
 ```
 
-4. Install binary tools:
+4. Configure the application:
 ```bash
-./scripts/install_tools.sh
+cp config.example.yaml config.yaml
+# Edit config.yaml with your settings
 ```
 
-5. Install the package:
+## Configuration
+
+The application can be configured using:
+
+1. Environment variables (prefixed with `SECAUDITAI_`)
+2. Configuration file (`config.yaml` or `config.json`)
+3. Command-line arguments
+
+### Required Configuration
+
+- `api_key`: Your SecAuditAI API key
+- `database_url`: Database connection URL
+- `log_level`: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+
+### Security Configuration
+
+- `encryption_key`: Encryption key for sensitive data
+- `jwt_secret`: Secret key for JWT token generation
+- `hmac_key`: Key for HMAC verification
+
+## Usage Examples
+
+### Infrastructure as Code Security
+
 ```bash
-pip install -e .
+# Scan Terraform configurations
+secauditai scan --target terraform --path /path/to/terraform
+
+# Scan CloudFormation templates
+secauditai scan --target cloudformation --path /path/to/templates
+
+# Scan Kubernetes manifests
+secauditai scan --target kubernetes --path /path/to/manifests
+
+# Scan Ansible playbooks
+secauditai scan --target ansible --path /path/to/playbooks
+
+# Multi-IaC scan
+secauditai scan --target iac --providers terraform,cloudformation,kubernetes
+
+# Generate IaC security report
+secauditai report --format csv --output iac_security.csv
 ```
 
-## Usage
+### Basic Security Scan
+
+```bash
+# Run a basic security scan
+secauditai scan --target example.com --type basic
+
+# Scan with specific checks
+secauditai scan --target example.com --checks sql-injection,xss,csrf
+
+# Generate CSV report
+secauditai scan --target example.com --format csv --output report.csv
+```
+
+### Infrastructure Scanning
+
+```bash
+# Scan AWS infrastructure
+secauditai scan --target aws --region us-east-1 --profile default
+
+# Scan Kubernetes cluster
+secauditai scan --target k8s --context my-cluster --namespace default
+
+# Scan Docker containers
+secauditai scan --target docker --image nginx:latest
+```
+
+### Code Analysis
+
+```bash
+# Analyze Python code
+secauditai scan --target code --language python --path /path/to/code
+
+# Analyze JavaScript code
+secauditai scan --target code --language javascript --path /path/to/code
+
+# Analyze multiple languages
+secauditai scan --target code --languages python,javascript,go --path /path/to/code
+```
+
+### Compliance Checks
+
+```bash
+# Run PCI-DSS compliance check
+secauditai compliance --framework pci-dss --target example.com
+
+# Run HIPAA compliance check
+secauditai compliance --framework hipaa --target example.com
+
+# Run custom compliance check
+secauditai compliance --framework custom --rules /path/to/rules.yaml
+```
+
+### Report Generation
+
+```bash
+# Generate CSV report
+secauditai report --format csv --output vulnerabilities.csv
+
+# Generate detailed PDF report
+secauditai report --format pdf --template detailed --output report.pdf
+
+# Generate executive summary
+secauditai report --format pdf --template executive --output summary.pdf
+```
+
+### CSV Report Format
+
+Example CSV report structure:
+```csv
+id,severity,category,title,description,location,remediation,status,last_updated
+VULN-001,High,Security,SQL Injection,SQL injection vulnerability in login form,/app/login.php,Use prepared statements,Open,2023-05-01
+VULN-002,Medium,Security,XSS,Cross-site scripting in search form,/app/search.php,Implement input validation,Fixed,2023-05-02
+```
+
+## Python API Examples
 
 ### Basic Usage
 
-```bash
-# Run a security scan
-secauditai scan --target /path/to/project
+```python
+from secauditai import SecAuditAI
 
-# Generate SBOM
-secauditai sbom --format spdx --output sbom.spdx
+# Initialize client
+client = SecAuditAI(api_key="your-api-key")
 
-# Monitor in real-time
-secauditai monitor --target aws --region us-east-1
-```
+# Run security scan
+results = client.scan("example.com")
 
-### Cloud Security Scanning
+# Generate compliance report
+report = client.generate_report("pci-dss")
 
-#### AWS Security Scanning (Using Prowler)
-```bash
-# Basic AWS security scan
-secauditai scan aws --profile default
-
-# Scan specific AWS services
-secauditai scan aws --services ec2,s3,iam
-
-# Run specific security checks
-secauditai scan aws --checks check11,check12,check13
-
-# Generate detailed security report
-secauditai scan aws --report html --output aws_security_report.html
-
-# Scan with custom rules
-secauditai scan aws --rules custom_rules.yaml
-
-# Scan specific regions
-secauditai scan aws --regions us-east-1,us-west-2
-
-# Scan with specific severity levels
-secauditai scan aws --severity critical,high
-```
-
-#### Azure Security Scanning
-```bash
-# Basic Azure security scan
-secauditai scan azure --subscription-id <id>
-
-# Scan specific resource groups
-secauditai scan azure --resource-groups rg1,rg2
-
-# Scan with custom rules
-secauditai scan azure --rules custom_rules.yaml
-
-# Generate detailed security report
-secauditai scan azure --report html --output azure_security_report.html
-```
-
-#### GCP Security Scanning
-```bash
-# Basic GCP security scan
-secauditai scan gcp --project-id <id>
-
-# Scan specific services
-secauditai scan gcp --services compute,storage,iam
-
-# Scan with custom rules
-secauditai scan gcp --rules custom_rules.yaml
-
-# Generate detailed security report
-secauditai scan gcp --report html --output gcp_security_report.html
+# Monitor security events
+events = client.monitor(alerts=True)
 ```
 
 ### Advanced Usage
 
-```bash
-# Enable experimental features
-export SECAUDITAI_EXPERIMENTAL=true
+```python
+from secauditai import SecAuditAI
+import asyncio
 
-# Run with custom rules
-secauditai scan --rules custom_rules.yaml
+async def main():
+    client = SecAuditAI(api_key="your-api-key")
+    
+    # Run multiple scans concurrently
+    targets = ["example.com", "api.example.com"]
+    results = await asyncio.gather(*[
+        client.scan(target, scan_type="full")
+        for target in targets
+    ])
+    
+    # Generate CSV report
+    await client.generate_report(
+        format="csv",
+        output="report.csv",
+        include=["vulnerabilities", "compliance", "recommendations"]
+    )
 
-# Generate detailed report
-secauditai report --format html --output security_report.html
-
-# Continuous monitoring with notifications
-secauditai monitor --notify slack --webhook-url $SLACK_WEBHOOK
+asyncio.run(main())
 ```
 
-## Underlying Tools
+## Security Features
 
-SecAuditAI leverages several powerful open-source tools for its security analysis capabilities:
+### Credential Management
 
-### Core Tools
+- Secure storage of API keys and credentials
+- Automatic credential rotation
+- Support for multiple backends:
+  - Local encrypted storage
+  - HashiCorp Vault
+  - AWS Secrets Manager
+  - Azure Key Vault
 
-1. **Prowler** - For AWS security assessment
-   - Official Page: [https://github.com/prowler-cloud/prowler](https://github.com/prowler-cloud/prowler)
-   - Manual Installation:
-   ```bash
-   # Install using pip
-   pip install prowler-cloud
+### Access Control
 
-   # Verify installation
-   prowler -v
-   ```
+- Role-based access control (RBAC)
+- JWT-based authentication
+- Permission-based authorization
+- Session management and timeout
 
-2. **Tree-sitter** - For advanced code parsing and analysis
-   - Official Page: [https://tree-sitter.github.io/tree-sitter/](https://tree-sitter.github.io/tree-sitter/)
-   - Manual Installation:
-   ```bash
-   # Install build dependencies
-   sudo apt-get update
-   sudo apt-get install build-essential nodejs npm
+### Data Protection
 
-   # Install tree-sitter
-   npm install -g tree-sitter-cli
-   ```
+- Encryption of sensitive data
+- Secure logging with redaction
+- HMAC verification
+- Data sanitization
 
-3. **Trivy** - For container and vulnerability scanning
-   - Official Page: [https://github.com/aquasecurity/trivy](https://github.com/aquasecurity/trivy)
-   - Manual Installation:
-   ```bash
-   # Download and install
-   curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
-   ```
+### Secure Configuration
 
-4. **Terraform** - For Infrastructure as Code analysis
-   - Official Page: [https://www.terraform.io/](https://www.terraform.io/)
-   - Manual Installation:
-   ```bash
-   # Download and install
-   wget https://releases.hashicorp.com/terraform/1.5.0/terraform_1.5.0_linux_amd64.zip
-   unzip terraform_1.5.0_linux_amd64.zip
-   sudo mv terraform /usr/local/bin/
-   ```
+- Encrypted configuration storage
+- Environment variable support
+- Configuration validation
+- Key rotation
 
-5. **AWS CLI** - For AWS infrastructure scanning
-   - Official Page: [https://aws.amazon.com/cli/](https://aws.amazon.com/cli/)
-   - Manual Installation:
-   ```bash
-   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-   unzip awscliv2.zip
-   sudo ./aws/install
-   ```
+## Development
 
-6. **Azure CLI** - For Azure infrastructure scanning
-   - Official Page: [https://docs.microsoft.com/en-us/cli/azure/](https://docs.microsoft.com/en-us/cli/azure/)
-   - Manual Installation:
-   ```bash
-   curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-   ```
+### Testing
 
-7. **gcloud CLI** - For GCP infrastructure scanning
-   - Official Page: [https://cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install)
-   - Manual Installation:
-   ```bash
-   # Add the Cloud SDK distribution URI as a package source
-   echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+```bash
+# Run tests
+pytest
 
-   # Import the Google Cloud public key
-   curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+# Run tests with coverage
+pytest --cov=secauditai
 
-   # Update and install the Cloud SDK
-   sudo apt-get update && sudo apt-get install google-cloud-sdk
-   ```
+# Run specific test
+pytest tests/test_scanner.py
+```
 
-### Troubleshooting Tool Installation
+### Code Style
 
-If you encounter issues during the automatic installation of these tools, you can:
+```bash
+# Format code
+black .
 
-1. Install them manually using the commands above
-2. Set the following environment variables to point to your manual installations:
-   ```bash
-   export SECAUDITAI_PROWLER_PATH=/path/to/prowler
-   export SECAUDITAI_TREE_SITTER_PATH=/path/to/tree-sitter
-   export SECAUDITAI_TRIVY_PATH=/path/to/trivy
-   export SECAUDITAI_TERRAFORM_PATH=/path/to/terraform
-   export SECAUDITAI_AWS_CLI_PATH=/path/to/aws
-   export SECAUDITAI_AZURE_CLI_PATH=/path/to/az
-   export SECAUDITAI_GCLOUD_PATH=/path/to/gcloud
-   ```
+# Sort imports
+isort .
 
-3. Verify the installations:
-   ```bash
-   # Check tool versions
-   prowler -v
-   tree-sitter --version
-   trivy --version
-   terraform --version
-   aws --version
-   az --version
-   gcloud --version
-   ```
+# Lint code
+flake8
+```
 
-## Documentation
+### Documentation
 
-For detailed documentation, please visit our [documentation site](https://parthasarathi7722.github.io/SecAuditAI/).
-
-- [API Reference](https://parthasarathi7722.github.io/SecAuditAI/api/)
-- [User Guide](https://parthasarathi7722.github.io/SecAuditAI/guide/)
-- [Examples](https://parthasarathi7722.github.io/SecAuditAI/examples/)
-- [FAQ](https://parthasarathi7722.github.io/SecAuditAI/faq/)
+```bash
+# Build documentation
+cd docs
+make html
+```
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Roadmap
-
-### Short-term Goals
-- [ ] Improve zero-day detection accuracy
-- [ ] Add support for more programming languages
-- [ ] Enhance real-time monitoring capabilities
-- [ ] Optimize resource usage
-
-### Medium-term Goals
-- [ ] Implement machine learning model training pipeline
-- [ ] Add support for additional cloud providers
-- [ ] Develop plugin marketplace
-- [ ] Improve documentation and tutorials
-
-### Long-term Goals
-- [ ] Develop advanced threat intelligence integration
-- [ ] Create community-driven rule repository
-- [ ] Implement automated remediation suggestions
-- [ ] Build comprehensive security dashboard
-
 ## Support
 
-For support, please:
+For support, please open an issue in the GitHub repository or contact support@secauditai.com.
 
-1. Check our [documentation](https://parthasarathi7722.github.io/SecAuditAI/)
-2. Search [existing issues](https://github.com/Parthasarathi7722/SecAuditAI/issues)
-3. Create a [new issue](https://github.com/Parthasarathi7722/SecAuditAI/issues/new)
+## Security
 
-For commercial support, please contact us at support@secauditai.com
+If you discover a security vulnerability, please report it to security@secauditai.com.
