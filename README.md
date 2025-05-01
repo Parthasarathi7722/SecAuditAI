@@ -1,6 +1,6 @@
 # SecAuditAI
-
-SecAuditAI is a comprehensive security auditing tool that leverages AI to perform automated security assessments across various domains including cloud infrastructure, code analysis, and compliance checks.
+# This project is on hold for now due to job hunt, however feel free to fork and customise if you wish 
+SecAuditAI is a comprehensive security auditing tool that leverages AI to perform automated security assessments across various domains including cloud infrastructure, code analysis, and compliance checks. **Note: This is an experimental tool, and some features, particularly zero-day vulnerability detection, are under active development and should be used with caution in production environments.**
 
 ## Features
 
@@ -12,12 +12,68 @@ SecAuditAI is a comprehensive security auditing tool that leverages AI to perfor
 - **Comprehensive Reporting**: Detailed security reports with actionable insights and remediation steps
 - **Real-time Analysis**: Continuous monitoring and alerting capabilities
 - **Compliance Framework Support**: Built-in support for major compliance frameworks (CIS, PCI, HIPAA, NIST, ISO27001)
-- **Zero-Day Vulnerability Detection**: Advanced AI models for detecting unknown vulnerabilities
+- **Zero-Day Vulnerability Detection** (Experimental): Advanced AI models for detecting unknown vulnerabilities. **Warning: This feature is experimental and may produce false positives. Use with caution in production environments.**
 - **Container Security**: Comprehensive container image scanning and runtime security monitoring
 - **Infrastructure as Code Security**: Automated security checks for Terraform, CloudFormation, and ARM templates
 - **API Security Testing**: Automated API security testing and vulnerability detection
 - **Custom Rule Engine**: Support for custom security rules and policies
 - **Integration Support**: Slack notifications and webhook integrations for alerts
+
+## Experimental Features
+
+The following features are marked as experimental and should be used with caution:
+
+1. **Zero-Day Vulnerability Detection**
+   - Status: Beta
+   - Known Limitations:
+     - May produce false positives
+     - Requires significant computational resources
+     - Limited to specific programming languages
+   - Usage Guidelines:
+     ```bash
+     # Enable experimental features
+     export SECAUDITAI_EXPERIMENTAL=true
+     
+     # Run with caution
+     secauditai scan --experimental --zero-day
+     ```
+
+2. **Advanced AI Model Training**
+   - Status: Alpha
+   - Known Limitations:
+     - Training data requirements
+     - Model accuracy variations
+     - Resource intensive
+   - Usage Guidelines:
+     ```bash
+     # Enable model training
+     secauditai train --experimental --model custom
+     ```
+
+3. **Real-time Security Monitoring**
+   - Status: Beta
+   - Known Limitations:
+     - High resource usage
+     - Network overhead
+     - Alert fatigue potential
+   - Usage Guidelines:
+     ```bash
+     # Enable real-time monitoring
+     secauditai monitor --experimental --real-time
+     ```
+
+### Experimental Feature Support
+
+For experimental features, we provide:
+- Limited support through GitHub issues
+- Community-driven development
+- Regular updates and improvements
+- Feedback collection mechanism
+
+To report issues with experimental features:
+```bash
+secauditai feedback --experimental --feature zero-day --issue "description"
+```
 
 ## Installation
 
@@ -318,3 +374,68 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] Machine learning model improvements
 - [ ] Documentation improvements
 - [ ] Community contributions
+
+## Security Audit Tools
+
+SecAuditAI integrates with several industry-standard security audit tools. Here's how to install and configure them manually if needed:
+
+### Static Analysis Tools
+
+1. **Bandit** - Python Security Linter
+   - Official Page: [https://bandit.readthedocs.io/](https://bandit.readthedocs.io/)
+   - Manual Installation:
+   ```bash
+   pip install bandit
+   # Run manually
+   bandit -r /path/to/code
+   ```
+
+2. **Semgrep** - Fast Static Analysis
+   - Official Page: [https://semgrep.dev/](https://semgrep.dev/)
+   - Manual Installation:
+   ```bash
+   python -m pip install semgrep
+   # Run manually
+   semgrep scan --config auto /path/to/code
+   ```
+
+3. **SonarQube** - Code Quality and Security
+   - Official Page: [https://www.sonarqube.org/](https://www.sonarqube.org/)
+   - Manual Installation:
+   ```bash
+   # Download and extract
+   wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.9.0.65466.zip
+   unzip sonarqube-9.9.0.65466.zip
+   cd sonarqube-9.9.0.65466/bin/linux-x86-64
+   ./sonar.sh start
+   ```
+
+### Container Security Tools
+
+1. **Clair** - Container Vulnerability Analysis
+   - Official Page: [https://github.com/quay/clair](https://github.com/quay/clair)
+   - Manual Installation:
+   ```bash
+   # Using Docker
+   docker run -d -e POSTGRES_PASSWORD=password -p 5432:5432 postgres:latest
+   docker run -d -p 6060:6060 --link postgres:postgres quay.io/coreos/clair:latest
+   ```
+
+2. **Anchore** - Container Image Analysis
+   - Official Page: [https://anchore.com/](https://anchore.com/)
+   - Manual Installation:
+   ```bash
+   # Using Docker
+   docker run -d --name anchore-engine -p 8228:8228 -p 8338:8338 anchore/anchore-engine:latest
+   ```
+
+### Cloud Security Tools
+
+1. **Prowler** - AWS Security Assessment
+   - Official Page: [https://github.com/prowler-cloud/prowler](https://github.com/prowler-cloud/prowler)
+   - Manual Installation:
+   ```bash
+   pip install prowler
+   # Run manually
+   prowler aws
+   ```
