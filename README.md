@@ -173,33 +173,6 @@ secauditai scan --target code --language javascript --path /path/to/code
 secauditai scan --target code --languages python,javascript,go --path /path/to/code
 ```
 
-### Compliance Checks
-
-```bash
-# Run PCI-DSS compliance check
-secauditai compliance --framework pci-dss --target example.com
-
-# Run HIPAA compliance check
-secauditai compliance --framework hipaa --target example.com
-
-# Run custom compliance check
-secauditai compliance --framework custom --rules /path/to/rules.yaml
-```
-
-### Report Generation
-
-```bash
-# Generate CSV report
-secauditai report --format csv --output vulnerabilities.csv
-
-# Generate detailed PDF report
-secauditai report --format pdf --template detailed --output report.pdf
-
-# Generate executive summary
-secauditai report --format pdf --template executive --output summary.pdf
-```
-
-### CSV Report Format
 
 Example CSV report structure:
 ```csv
