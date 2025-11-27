@@ -1,3 +1,6 @@
+Here’s a cleaned-up, syntax-correct version of your `code_scanner.py` with the merge damage fixed, duplicate defs removed, and logic preserved:
+
+```python
 """
 Code security scanner plugin.
 """
@@ -6,23 +9,18 @@ from __future__ import annotations
 import re
 from pathlib import Path
 from typing import Dict, Any, List, Tuple, Optional, Match
-from typing import Dict, Any, List, Tuple, Optional, Match
 
 from .. import ScannerPlugin
 
 Findings = List[Dict[str, Any]]
 
+
 class CodeScanner(ScannerPlugin):
     """Code security scanner implementation."""
-    
+
     def __init__(self):
         self.languages = self._load_languages()
         self.checks = self._load_checks()
-
-    @staticmethod
-    def _line_number(code: str, match: Match[str]) -> int:
-        """Return the 1-based line number for a regex match."""
-        return code.count("\n", 0, match.start()) + 1
 
     @staticmethod
     def _line_number(code: str, match: Match[str]) -> int:
@@ -85,18 +83,13 @@ class CodeScanner(ScannerPlugin):
         """Return a stable resource string for a finding."""
         return str(file_path or Path("<memory>"))
 
-    def _check_hardcoded_secrets(self, code: str, language: str, file_path: Optional[Path] = None) -> List[Dict[str, Any]]:
-    @staticmethod
-    def _resource(file_path: Optional[Path]) -> str:
-        """Return a stable resource string for a finding."""
-        return str(file_path or Path("<memory>"))
-
-    def _check_hardcoded_secrets(self, code: str, language: str, file_path: Optional[Path] = None) -> List[Dict[str, Any]]:
+    def _check_hardcoded_secrets(
+        self, code: str, language: str, file_path: Optional[Path] = None
+    ) -> List[Dict[str, Any]]:
         """Check for hardcoded secrets in code."""
-        findings = []
+        findings: Findings = []
         resource = self._resource(file_path)
-        resource = self._resource(file_path)
-        
+
         # Common patterns for secrets
         secret_patterns = [
             r'password\s*=\s*[\'"][^\'"]+[\'"]',
@@ -107,67 +100,66 @@ class CodeScanner(ScannerPlugin):
             r'aws_secret_access_key\s*=\s*[\'"][^\'"]+[\'"]',
             r'private_key\s*=\s*[\'"][^\'"]+[\'"]',
             r'certificate\s*=\s*[\'"][^\'"]+[\'"]',
-            r'ghp_[A-Za-z0-9]{10,}'
-            r'certificate\s*=\s*[\'"][^\'"]+[\'"]',
-            r'ghp_[A-Za-z0-9]{10,}'
+            r'ghp_[A-Za-z0-9]{10,}',
         ]
-        
+
         for pattern in secret_patterns:
             matches = re.finditer(pattern, code, re.IGNORECASE)
             for match in matches:
-                findings.append({
-                    "check_id": "code-001",
-                    "resource": f"{resource}:{self._line_number(code, match)}",
-                    "resource": f"{resource}:{self._line_number(code, match)}",
-                    "status": "failed",
-                    "message": "Potential hardcoded secret found",
-                    "severity": "high",
-                    "recommendation": "Use environment variables or secure secret management"
-                })
-        
+                findings.append(
+                    {
+                        "check_id": "code-001",
+                        "resource": f"{resource}:{self._line_number(code, match)}",
+                        "status": "failed",
+                        "message": "Potential hardcoded secret found",
+                        "severity": "high",
+                        "recommendation": "Use environment variables or secure secret management",
+                    }
+                )
+
         return findings
 
-    def _check_sql_injection(self, code: str, language: str, file_path: Optional[Path] = None) -> List[Dict[str, Any]]:
-    def _check_sql_injection(self, code: str, language: str, file_path: Optional[Path] = None) -> List[Dict[str, Any]]:
+    def _check_sql_injection(
+        self, code: str, language: str, file_path: Optional[Path] = None
+    ) -> List[Dict[str, Any]]:
         """Check for SQL injection vulnerabilities."""
-        findings = []
+        findings: Findings = []
         resource = self._resource(file_path)
-        resource = self._resource(file_path)
-        
+
         # SQL injection patterns
         sql_patterns = [
             r'execute\s*\([^)]*\+',
             r'exec\s*\([^)]*\+',
             r'query\s*\([^)]*\+',
             r'query\s*\([^)]*\$\{[^}]+\}',
-            r'query\s*\([^)]*\$\{[^}]+\}',
             r'raw\s*\([^)]*\+',
             r'format\s*\([^)]*\+',
-            r'f\s*"[^"]*\{[^}]*\}.*"'
+            r'f\s*"[^"]*\{[^}]*\}.*"',
         ]
-        
+
         for pattern in sql_patterns:
             matches = re.finditer(pattern, code, re.IGNORECASE)
             for match in matches:
-                findings.append({
-                    "check_id": "code-002",
-                    "resource": f"{resource}:{self._line_number(code, match)}",
-                    "resource": f"{resource}:{self._line_number(code, match)}",
-                    "status": "failed",
-                    "message": "Potential SQL injection vulnerability",
-                    "severity": "high",
-                    "recommendation": "Use parameterized queries or prepared statements"
-                })
-        
+                findings.append(
+                    {
+                        "check_id": "code-002",
+                        "resource": f"{resource}:{self._line_number(code, match)}",
+                        "status": "failed",
+                        "message": "Potential SQL injection vulnerability",
+                        "severity": "high",
+                        "recommendation": "Use parameterized queries or prepared statements",
+                    }
+                )
+
         return findings
 
-    def _check_xss(self, code: str, language: str, file_path: Optional[Path] = None) -> List[Dict[str, Any]]:
-    def _check_xss(self, code: str, language: str, file_path: Optional[Path] = None) -> List[Dict[str, Any]]:
+    def _check_xss(
+        self, code: str, language: str, file_path: Optional[Path] = None
+    ) -> List[Dict[str, Any]]:
         """Check for XSS vulnerabilities."""
-        findings = []
+        findings: Findings = []
         resource = self._resource(file_path)
-        resource = self._resource(file_path)
-        
+
         # XSS patterns
         xss_patterns = [
             r'innerHTML\s*=\s*[^;]+',
@@ -176,31 +168,32 @@ class CodeScanner(ScannerPlugin):
             r'setTimeout\s*\([^)]+\)',
             r'setInterval\s*\([^)]+\)',
             r'location\s*=\s*[^;]+',
-            r'location\.href\s*=\s*[^;]+'
+            r'location\.href\s*=\s*[^;]+',
         ]
-        
+
         for pattern in xss_patterns:
             matches = re.finditer(pattern, code, re.IGNORECASE)
             for match in matches:
-                findings.append({
-                    "check_id": "code-003",
-                    "resource": f"{resource}:{self._line_number(code, match)}",
-                    "resource": f"{resource}:{self._line_number(code, match)}",
-                    "status": "failed",
-                    "message": "Potential XSS vulnerability",
-                    "severity": "high",
-                    "recommendation": "Use proper output encoding and sanitization"
-                })
-        
+                findings.append(
+                    {
+                        "check_id": "code-003",
+                        "resource": f"{resource}:{self._line_number(code, match)}",
+                        "status": "failed",
+                        "message": "Potential XSS vulnerability",
+                        "severity": "high",
+                        "recommendation": "Use proper output encoding and sanitization",
+                    }
+                )
+
         return findings
 
-    def _check_broken_access_control(self, code: str, language: str, file_path: Optional[Path] = None) -> List[Dict[str, Any]]:
-    def _check_broken_access_control(self, code: str, language: str, file_path: Optional[Path] = None) -> List[Dict[str, Any]]:
+    def _check_broken_access_control(
+        self, code: str, language: str, file_path: Optional[Path] = None
+    ) -> List[Dict[str, Any]]:
         """Check for broken access control vulnerabilities."""
-        findings = []
+        findings: Findings = []
         resource = self._resource(file_path)
-        resource = self._resource(file_path)
-        
+
         # Broken access control patterns
         access_patterns = [
             r'is_admin\s*=\s*True',
@@ -208,61 +201,63 @@ class CodeScanner(ScannerPlugin):
             r'role\s*=\s*[\'"]admin[\'"]',
             r'permission\s*=\s*[\'"]all[\'"]',
             r'bypass\s*=\s*True',
-            r'bypass\s*=\s*true'
+            r'bypass\s*=\s*true',
         ]
-        
+
         for pattern in access_patterns:
             matches = re.finditer(pattern, code, re.IGNORECASE)
             for match in matches:
-                findings.append({
-                    "check_id": "code-004",
-                    "resource": f"{resource}:{self._line_number(code, match)}",
-                    "resource": f"{resource}:{self._line_number(code, match)}",
-                    "status": "failed",
-                    "message": "Potential broken access control vulnerability",
-                    "severity": "high",
-                    "recommendation": "Implement proper access control checks"
-                })
-        
+                findings.append(
+                    {
+                        "check_id": "code-004",
+                        "resource": f"{resource}:{self._line_number(code, match)}",
+                        "status": "failed",
+                        "message": "Potential broken access control vulnerability",
+                        "severity": "high",
+                        "recommendation": "Implement proper access control checks",
+                    }
+                )
+
         return findings
 
-    def _check_csrf(self, code: str, language: str, file_path: Optional[Path] = None) -> List[Dict[str, Any]]:
-    def _check_csrf(self, code: str, language: str, file_path: Optional[Path] = None) -> List[Dict[str, Any]]:
+    def _check_csrf(
+        self, code: str, language: str, file_path: Optional[Path] = None
+    ) -> List[Dict[str, Any]]:
         """Check for CSRF protection."""
-        findings = []
+        findings: Findings = []
         resource = self._resource(file_path)
-        resource = self._resource(file_path)
-        
+
         # CSRF patterns
         csrf_patterns = [
             r'@csrf_exempt',
             r'csrf_exempt\s*\(',
             r'disable_csrf\s*=\s*True',
-            r'disable_csrf\s*=\s*true'
+            r'disable_csrf\s*=\s*true',
         ]
-        
+
         for pattern in csrf_patterns:
             matches = re.finditer(pattern, code, re.IGNORECASE)
             for match in matches:
-                findings.append({
-                    "check_id": "code-005",
-                    "resource": f"{resource}:{self._line_number(code, match)}",
-                    "resource": f"{resource}:{self._line_number(code, match)}",
-                    "status": "failed",
-                    "message": "CSRF protection disabled",
-                    "severity": "high",
-                    "recommendation": "Enable CSRF protection"
-                })
-        
+                findings.append(
+                    {
+                        "check_id": "code-005",
+                        "resource": f"{resource}:{self._line_number(code, match)}",
+                        "status": "failed",
+                        "message": "CSRF protection disabled",
+                        "severity": "high",
+                        "recommendation": "Enable CSRF protection",
+                    }
+                )
+
         return findings
 
-    def _check_file_inclusion(self, code: str, language: str, file_path: Optional[Path] = None) -> List[Dict[str, Any]]:
-    def _check_file_inclusion(self, code: str, language: str, file_path: Optional[Path] = None) -> List[Dict[str, Any]]:
+    def _check_file_inclusion(
+        self, code: str, language: str, file_path: Optional[Path] = None
+    ) -> List[Dict[str, Any]]:
         """Check for file inclusion vulnerabilities."""
-        findings = []
+        findings: Findings = []
         resource = self._resource(file_path)
-        resource = self._resource(file_path)
-        
+
         # File inclusion patterns
         file_patterns = [
             r'include\s*\([^)]+\)',
@@ -270,22 +265,23 @@ class CodeScanner(ScannerPlugin):
             r'require_once\s*\([^)]+\)',
             r'include_once\s*\([^)]+\)',
             r'fopen\s*\([^)]+\)',
-            r'file_get_contents\s*\([^)]+\)'
+            r'file_get_contents\s*\([^)]+\)',
         ]
-        
+
         for pattern in file_patterns:
             matches = re.finditer(pattern, code, re.IGNORECASE)
             for match in matches:
-                findings.append({
-                    "check_id": "code-006",
-                    "resource": f"{resource}:{self._line_number(code, match)}",
-                    "resource": f"{resource}:{self._line_number(code, match)}",
-                    "status": "failed",
-                    "message": "Potential file inclusion vulnerability",
-                    "severity": "high",
-                    "recommendation": "Validate file paths and use allowlists"
-                })
-        
+                findings.append(
+                    {
+                        "check_id": "code-006",
+                        "resource": f"{resource}:{self._line_number(code, match)}",
+                        "status": "failed",
+                        "message": "Potential file inclusion vulnerability",
+                        "severity": "high",
+                        "recommendation": "Validate file paths and use allowlists",
+                    }
+                )
+
         return findings
 
     def _detect_language(self, file_path: Path) -> Optional[str]:
@@ -295,7 +291,9 @@ class CodeScanner(ScannerPlugin):
                 return language
         return None
 
-    def _iter_source_files(self, target_path: Path, language: Optional[str]) -> List[Tuple[Path, str]]:
+    def _iter_source_files(
+        self, target_path: Path, language: Optional[str]
+    ) -> List[Tuple[Path, str]]:
         """Collect supported source files under the target."""
         if language and language not in self.languages:
             raise ValueError(f"Unsupported language: {language}")
@@ -335,7 +333,6 @@ class CodeScanner(ScannerPlugin):
     def scan(self, target: str, **kwargs) -> Dict[str, Any]:
         """Perform code security scan."""
         path = kwargs.get("path") or target
-        path = kwargs.get("path") or target
         requested_language = kwargs.get("language")
 
         if not path:
@@ -345,7 +342,7 @@ class CodeScanner(ScannerPlugin):
         if not target_path.exists():
             raise ValueError(f"Invalid path provided: {path}")
 
-        findings: List[Dict[str, Any]] = []
+        findings: Findings = []
         for file_path, language in self._iter_source_files(target_path, requested_language):
             code = file_path.read_text(encoding="utf-8", errors="ignore")
             findings.extend(self._check_hardcoded_secrets(code, language, file_path))
@@ -370,5 +367,4 @@ class CodeScanner(ScannerPlugin):
     def get_description(self) -> str:
         """Get scanner description."""
         return "Source code security scanner"
-
-        return "Source code security scanner"
+```
