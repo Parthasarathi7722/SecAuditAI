@@ -6,7 +6,7 @@ from __future__ import annotations
 import os
 import re
 from pathlib import Path
-from typing import Dict, Any, List, Tuple, Optional
+from typing import Dict, Any, List, Tuple, Optional, Match
 
 from .. import ScannerPlugin
 
@@ -16,6 +16,11 @@ class CodeScanner(ScannerPlugin):
     def __init__(self):
         self.languages = self._load_languages()
         self.checks = self._load_checks()
+
+    @staticmethod
+    def _line_number(code: str, match: Match[str]) -> int:
+        """Return the 1-based line number for a regex match."""
+        return code.count("\n", 0, match.start()) + 1
 
     def _load_languages(self) -> Dict[str, Dict[str, Any]]:
         """Return metadata about supported languages."""
@@ -89,7 +94,7 @@ class CodeScanner(ScannerPlugin):
             for match in matches:
                 findings.append({
                     "check_id": "code-001",
-                    "resource": f"{file_path}:{code.count('\n', 0, match.start()) + 1}",
+                    "resource": f"{file_path}:{self._line_number(code, match)}",
                     "status": "failed",
                     "message": "Potential hardcoded secret found",
                     "severity": "high",
@@ -117,7 +122,7 @@ class CodeScanner(ScannerPlugin):
             for match in matches:
                 findings.append({
                     "check_id": "code-002",
-                    "resource": f"{file_path}:{code.count('\n', 0, match.start()) + 1}",
+                    "resource": f"{file_path}:{self._line_number(code, match)}",
                     "status": "failed",
                     "message": "Potential SQL injection vulnerability",
                     "severity": "high",
@@ -146,7 +151,7 @@ class CodeScanner(ScannerPlugin):
             for match in matches:
                 findings.append({
                     "check_id": "code-003",
-                    "resource": f"{file_path}:{code.count('\n', 0, match.start()) + 1}",
+                    "resource": f"{file_path}:{self._line_number(code, match)}",
                     "status": "failed",
                     "message": "Potential XSS vulnerability",
                     "severity": "high",
@@ -174,7 +179,7 @@ class CodeScanner(ScannerPlugin):
             for match in matches:
                 findings.append({
                     "check_id": "code-004",
-                    "resource": f"{file_path}:{code.count('\n', 0, match.start()) + 1}",
+                    "resource": f"{file_path}:{self._line_number(code, match)}",
                     "status": "failed",
                     "message": "Potential broken access control vulnerability",
                     "severity": "high",
@@ -200,7 +205,7 @@ class CodeScanner(ScannerPlugin):
             for match in matches:
                 findings.append({
                     "check_id": "code-005",
-                    "resource": f"{file_path}:{code.count('\n', 0, match.start()) + 1}",
+                    "resource": f"{file_path}:{self._line_number(code, match)}",
                     "status": "failed",
                     "message": "CSRF protection disabled",
                     "severity": "high",
@@ -228,7 +233,7 @@ class CodeScanner(ScannerPlugin):
             for match in matches:
                 findings.append({
                     "check_id": "code-006",
-                    "resource": f"{file_path}:{code.count('\n', 0, match.start()) + 1}",
+                    "resource": f"{file_path}:{self._line_number(code, match)}",
                     "status": "failed",
                     "message": "Potential file inclusion vulnerability",
                     "severity": "high",
