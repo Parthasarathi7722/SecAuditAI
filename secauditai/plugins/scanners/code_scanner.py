@@ -330,4 +330,4 @@ class CodeScanner(ScannerPlugin):
 
     def get_description(self) -> str:
         """Get scanner description."""
-        return "Source code security scanner" 
+        return "Source code security scanner"
