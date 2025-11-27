@@ -11,10 +11,17 @@ from typing import Dict, List, Optional, Union
 from datetime import datetime
 
 class WebhookNotifier:
-    def __init__(self, webhook_url: str, headers: Optional[Dict] = None):
-        self.webhook_url = webhook_url
+    def __init__(
+        self,
+        webhook_url: str | None = None,
+        headers: Optional[Dict] = None,
+        url: Optional[str] = None,
+        secret: Optional[str] = None,
+    ):
+        self.webhook_url = webhook_url or url or ""
         self.session = requests.Session()
         self.headers = headers or {"Content-Type": "application/json"}
+        self.secret = secret
     
     def send_alert(self,
                   title: str,
