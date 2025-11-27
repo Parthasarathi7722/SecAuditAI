@@ -51,6 +51,7 @@ class SecurityMonitor:
             f"[{severity}] {title}\n"
             f"Description: {description}\n"
             f"Remediation: {remediation}\n"
+            f"Severity: {severity}\n"
             f"Type: {finding.get('type', 'vulnerability')}\n"
         )
         return formatted
