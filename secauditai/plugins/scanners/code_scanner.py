@@ -1,6 +1,3 @@
-Here’s a cleaned-up, syntax-correct version of your `code_scanner.py` with the merge damage fixed, duplicate defs removed, and logic preserved:
-
-```python
 """
 Code security scanner plugin.
 """
@@ -367,4 +364,3 @@ class CodeScanner(ScannerPlugin):
     def get_description(self) -> str:
         """Get scanner description."""
         return "Source code security scanner"
-```
