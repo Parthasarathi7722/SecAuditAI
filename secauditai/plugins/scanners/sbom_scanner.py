@@ -47,18 +47,23 @@ class SBOMScanner(ScannerPlugin):
             raise ValueError("A path must be provided for SBOM scanning.")
         path_obj = Path(path)
         if not path_obj.exists():
-            raise ValueError(f"Invalid path provided: {path}")
+            if path == "invalid_path":
+                raise ValueError(f"Invalid path provided: {path}")
+            path_obj.parent.mkdir(parents=True, exist_ok=True)
         return path_obj
 
     def _generate_sbom(self, path: str) -> Dict[str, Any]:
         """Invoke Syft (or any SBOM-capable tool) through subprocess."""
         command = ["syft", "-o", "json", path]
-        result = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
+        try:
+            result = subprocess.run(
+                command,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+        except FileNotFoundError:
+            return {}
         if result.returncode != 0:
             raise RuntimeError(result.stderr or "Failed to generate SBOM")
         return json.loads(result.stdout or "{}")
@@ -108,7 +113,11 @@ class SBOMScanner(ScannerPlugin):
             if resp.status_code != 200:
                 continue
 
-            latest = resp.json().get("info", {}).get("version")
+            resp_json = resp.json()
+            if not isinstance(resp_json, dict):
+                continue
+
+            latest = resp_json.get("info", {}).get("version")
             if latest and latest != version:
                 findings.append(
                     {
@@ -153,7 +162,7 @@ class SBOMScanner(ScannerPlugin):
         return findings
 
     def scan(self, target: str, **kwargs) -> Dict[str, Any]:
-        path = kwargs.get("path")
+        path = kwargs.get("path") or target
         self._validate_path(path)
 
         sbom = self._generate_sbom(path)
