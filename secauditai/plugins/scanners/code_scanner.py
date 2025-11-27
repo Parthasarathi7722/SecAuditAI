@@ -10,6 +10,8 @@ from typing import Dict, Any, List, Tuple, Optional, Match
 
 from .. import ScannerPlugin
 
+Findings = List[Dict[str, Any]]
+
 class CodeScanner(ScannerPlugin):
     """Code security scanner implementation."""
     
