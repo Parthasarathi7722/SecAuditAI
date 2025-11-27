@@ -11,8 +11,9 @@ from typing import Dict, List, Optional
 from datetime import datetime
 
 class SlackNotifier:
-    def __init__(self, webhook_url: str):
+    def __init__(self, webhook_url: str, channel: Optional[str] = None):
         self.webhook_url = webhook_url
+        self.channel = channel
         self.session = requests.Session()
     
     def send_alert(self, 
