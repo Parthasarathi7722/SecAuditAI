@@ -77,14 +77,15 @@ class CloudScanner(BaseScanner):
             args.extend(["--region", region])
         if compliance_framework:
             args.extend(["--compliance", compliance_framework])
-            
+
         prowler_output = self._run_prowler(provider, args)
         findings = self._format_findings(prowler_output)
-        
+
         return {
             "scan_id": f"scan-{datetime.now().strftime('%Y%m%d-%H%M%S')}",
             "timestamp": datetime.now().isoformat(),
             "provider": provider,
+            "region": region,
             "compliance_framework": compliance_framework,
             "summary": prowler_output.get("summary", {}),
             "findings": findings
