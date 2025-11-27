@@ -1,97 +1,74 @@
 """
 Code security scanner plugin.
 """
+from __future__ import annotations
+
 import os
-from typing import Dict, Any, List
-from pathlib import Path
-import tree_sitter
-from tree_sitter import Language, Parser
 import re
+from pathlib import Path
+from typing import Dict, Any, List, Tuple, Optional
+
 from .. import ScannerPlugin
 
 class CodeScanner(ScannerPlugin):
     """Code security scanner implementation."""
     
     def __init__(self):
-        self.parser = Parser()
-        self.languages = {}
-        self._load_languages()
+        self.languages = self._load_languages()
         self.checks = self._load_checks()
 
-    def _load_languages(self) -> None:
-        """Load Tree-sitter language parsers."""
+    def _load_languages(self) -> Dict[str, Dict[str, Any]]:
+        """Return metadata about supported languages."""
         languages = {
-            'python': 'tree-sitter-python',
-            'javascript': 'tree-sitter-javascript',
-            'java': 'tree-sitter-java',
-            'go': 'tree-sitter-go'
+            "python": {"extensions": [".py"]},
+            "javascript": {"extensions": [".js", ".jsx"]},
+            "java": {"extensions": [".java"]},
+            "go": {"extensions": [".go"]},
         }
-        
-        # Create build directory
-        build_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'build')
-        os.makedirs(build_dir, exist_ok=True)
-        
-        # Build language library
-        language_lib = os.path.join(build_dir, 'languages.so')
-        Language.build_library(
-            language_lib,
-            [
-                'tree-sitter-python',
-                'tree-sitter-javascript',
-                'tree-sitter-java',
-                'tree-sitter-go'
-            ]
-        )
-        
-        # Load languages
-        for lang, repo in languages.items():
-            try:
-                self.languages[lang] = Language(language_lib, lang)
-            except Exception as e:
-                print(f"Error loading {lang} parser: {str(e)}")
+        return languages
 
-    def _load_checks(self) -> List[Dict[str, Any]]:
+    def _load_checks(self) -> Dict[str, Dict[str, Any]]:
         """Load code security checks."""
-        return [
-            {
+        return {
+            "hardcoded_secrets": {
                 "id": "code-001",
                 "name": "Hardcoded Secrets",
                 "description": "Check for hardcoded credentials and secrets",
-                "severity": "high"
+                "severity": "high",
             },
-            {
+            "sql_injection": {
                 "id": "code-002",
                 "name": "SQL Injection",
                 "description": "Check for potential SQL injection vulnerabilities",
-                "severity": "high"
+                "severity": "high",
             },
-            {
+            "xss": {
                 "id": "code-003",
                 "name": "XSS Vulnerability",
                 "description": "Check for potential XSS vulnerabilities",
-                "severity": "high"
+                "severity": "high",
             },
-            {
+            "broken_access_control": {
                 "id": "code-004",
                 "name": "Broken Access Control",
                 "description": "Check for broken access control vulnerabilities",
-                "severity": "high"
+                "severity": "high",
             },
-            {
+            "csrf": {
                 "id": "code-005",
                 "name": "CSRF Vulnerability",
                 "description": "Check for CSRF protection",
-                "severity": "high"
+                "severity": "high",
             },
-            {
+            "file_inclusion": {
                 "id": "code-006",
                 "name": "File Inclusion",
                 "description": "Check for file inclusion vulnerabilities",
-                "severity": "high"
-            }
-        ]
+                "severity": "high",
+            },
+        }
 
-    def _check_hardcoded_secrets(self, code: str, language: str) -> List[Dict[str, Any]]:
+    def _check_hardcoded_secrets(self, code: str, language: str, file_path: Path) -> List[Dict[str, Any]]:
         """Check for hardcoded secrets in code."""
         findings = []
         
@@ -112,7 +89,7 @@ class CodeScanner(ScannerPlugin):
             for match in matches:
                 findings.append({
                     "check_id": "code-001",
-                    "resource": f"Line {code.count('\n', 0, match.start()) + 1}",
+                    "resource": f"{file_path}:{code.count('\n', 0, match.start()) + 1}",
                     "status": "failed",
                     "message": "Potential hardcoded secret found",
                     "severity": "high",
@@ -121,7 +98,7 @@ class CodeScanner(ScannerPlugin):
         
         return findings
 
-    def _check_sql_injection(self, code: str, language: str) -> List[Dict[str, Any]]:
+    def _check_sql_injection(self, code: str, language: str, file_path: Path) -> List[Dict[str, Any]]:
         """Check for SQL injection vulnerabilities."""
         findings = []
         
@@ -140,7 +117,7 @@ class CodeScanner(ScannerPlugin):
             for match in matches:
                 findings.append({
                     "check_id": "code-002",
-                    "resource": f"Line {code.count('\n', 0, match.start()) + 1}",
+                    "resource": f"{file_path}:{code.count('\n', 0, match.start()) + 1}",
                     "status": "failed",
                     "message": "Potential SQL injection vulnerability",
                     "severity": "high",
@@ -149,7 +126,7 @@ class CodeScanner(ScannerPlugin):
         
         return findings
 
-    def _check_xss(self, code: str, language: str) -> List[Dict[str, Any]]:
+    def _check_xss(self, code: str, language: str, file_path: Path) -> List[Dict[str, Any]]:
         """Check for XSS vulnerabilities."""
         findings = []
         
@@ -169,7 +146,7 @@ class CodeScanner(ScannerPlugin):
             for match in matches:
                 findings.append({
                     "check_id": "code-003",
-                    "resource": f"Line {code.count('\n', 0, match.start()) + 1}",
+                    "resource": f"{file_path}:{code.count('\n', 0, match.start()) + 1}",
                     "status": "failed",
                     "message": "Potential XSS vulnerability",
                     "severity": "high",
@@ -178,7 +155,7 @@ class CodeScanner(ScannerPlugin):
         
         return findings
 
-    def _check_broken_access_control(self, code: str, language: str) -> List[Dict[str, Any]]:
+    def _check_broken_access_control(self, code: str, language: str, file_path: Path) -> List[Dict[str, Any]]:
         """Check for broken access control vulnerabilities."""
         findings = []
         
@@ -197,7 +174,7 @@ class CodeScanner(ScannerPlugin):
             for match in matches:
                 findings.append({
                     "check_id": "code-004",
-                    "resource": f"Line {code.count('\n', 0, match.start()) + 1}",
+                    "resource": f"{file_path}:{code.count('\n', 0, match.start()) + 1}",
                     "status": "failed",
                     "message": "Potential broken access control vulnerability",
                     "severity": "high",
@@ -206,7 +183,7 @@ class CodeScanner(ScannerPlugin):
         
         return findings
 
-    def _check_csrf(self, code: str, language: str) -> List[Dict[str, Any]]:
+    def _check_csrf(self, code: str, language: str, file_path: Path) -> List[Dict[str, Any]]:
         """Check for CSRF protection."""
         findings = []
         
@@ -223,7 +200,7 @@ class CodeScanner(ScannerPlugin):
             for match in matches:
                 findings.append({
                     "check_id": "code-005",
-                    "resource": f"Line {code.count('\n', 0, match.start()) + 1}",
+                    "resource": f"{file_path}:{code.count('\n', 0, match.start()) + 1}",
                     "status": "failed",
                     "message": "CSRF protection disabled",
                     "severity": "high",
@@ -232,7 +209,7 @@ class CodeScanner(ScannerPlugin):
         
         return findings
 
-    def _check_file_inclusion(self, code: str, language: str) -> List[Dict[str, Any]]:
+    def _check_file_inclusion(self, code: str, language: str, file_path: Path) -> List[Dict[str, Any]]:
         """Check for file inclusion vulnerabilities."""
         findings = []
         
@@ -251,7 +228,7 @@ class CodeScanner(ScannerPlugin):
             for match in matches:
                 findings.append({
                     "check_id": "code-006",
-                    "resource": f"Line {code.count('\n', 0, match.start()) + 1}",
+                    "resource": f"{file_path}:{code.count('\n', 0, match.start()) + 1}",
                     "status": "failed",
                     "message": "Potential file inclusion vulnerability",
                     "severity": "high",
@@ -260,74 +237,79 @@ class CodeScanner(ScannerPlugin):
         
         return findings
 
+    def _detect_language(self, file_path: Path) -> Optional[str]:
+        """Infer language from file extension."""
+        for language, metadata in self.languages.items():
+            if any(str(file_path).endswith(ext) for ext in metadata["extensions"]):
+                return language
+        return None
+
+    def _iter_source_files(self, target_path: Path, language: Optional[str]) -> List[Tuple[Path, str]]:
+        """Collect supported source files under the target."""
+        if language and language not in self.languages:
+            raise ValueError(f"Unsupported language: {language}")
+
+        if target_path.is_file():
+            detected = language or self._detect_language(target_path)
+            if not detected:
+                raise ValueError(f"Unsupported file type: {target_path.suffix}")
+            return [(target_path, detected)]
+
+        files: List[Tuple[Path, str]] = []
+        target_languages = [language] if language else list(self.languages.keys())
+        for lang in target_languages:
+            for ext in self.languages[lang]["extensions"]:
+                for file_path in target_path.rglob(f"*{ext}"):
+                    files.append((file_path, lang))
+
+        if not files:
+            raise ValueError("No supported source files were found for scanning.")
+        return files
+
+    def _summarize_findings(self, findings: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Generate summary statistics for findings."""
+        summary = {
+            "total_findings": len(findings),
+            "high_severity": 0,
+            "medium_severity": 0,
+            "low_severity": 0,
+        }
+        for finding in findings:
+            severity = finding.get("severity", "").lower()
+            key = f"{severity}_severity"
+            if key in summary:
+                summary[key] += 1
+        return summary
+
     def scan(self, target: str, **kwargs) -> Dict[str, Any]:
         """Perform code security scan."""
-        path = kwargs.get('path')
-        language = kwargs.get('language', 'python')
-        
-        if not path or not os.path.exists(path):
-            return {
-                "scanner": self.get_name(),
-                "target": target,
-                "findings": [{
-                    "check_id": "code-000",
-                    "resource": path,
-                    "status": "error",
-                    "message": "Invalid path provided"
-                }],
-                "summary": {
-                    "total": 1,
-                    "failed": 0,
-                    "passed": 0,
-                    "error": 1
-                }
-            }
-        
-        try:
-            with open(path, 'r') as f:
-                code = f.read()
-            
-            # Set language parser
-            if language in self.languages:
-                self.parser.set_language(self.languages[language])
-            
-            findings = []
-            findings.extend(self._check_hardcoded_secrets(code, language))
-            findings.extend(self._check_sql_injection(code, language))
-            findings.extend(self._check_xss(code, language))
-            findings.extend(self._check_broken_access_control(code, language))
-            findings.extend(self._check_csrf(code, language))
-            findings.extend(self._check_file_inclusion(code, language))
-            
-            return {
-                "scanner": self.get_name(),
-                "target": target,
-                "findings": findings,
-                "summary": {
-                    "total": len(findings),
-                    "failed": len([f for f in findings if f['status'] == 'failed']),
-                    "passed": len([f for f in findings if f['status'] == 'passed']),
-                    "error": len([f for f in findings if f['status'] == 'error'])
-                }
-            }
-            
-        except Exception as e:
-            return {
-                "scanner": self.get_name(),
-                "target": target,
-                "findings": [{
-                    "check_id": "code-000",
-                    "resource": path,
-                    "status": "error",
-                    "message": f"Error scanning file: {str(e)}"
-                }],
-                "summary": {
-                    "total": 1,
-                    "failed": 0,
-                    "passed": 0,
-                    "error": 1
-                }
-            }
+        path = kwargs.get("path")
+        requested_language = kwargs.get("language")
+
+        if not path:
+            raise ValueError("Path must be provided for code scanning.")
+
+        target_path = Path(path)
+        if not target_path.exists():
+            raise ValueError(f"Invalid path provided: {path}")
+
+        findings: List[Dict[str, Any]] = []
+        for file_path, language in self._iter_source_files(target_path, requested_language):
+            code = file_path.read_text(encoding="utf-8", errors="ignore")
+            findings.extend(self._check_hardcoded_secrets(code, language, file_path))
+            findings.extend(self._check_sql_injection(code, language, file_path))
+            findings.extend(self._check_xss(code, language, file_path))
+            findings.extend(self._check_broken_access_control(code, language, file_path))
+            findings.extend(self._check_csrf(code, language, file_path))
+            findings.extend(self._check_file_inclusion(code, language, file_path))
+
+        result = {
+            "scanner": self.get_name(),
+            "target": target,
+            "findings": findings,
+            "summary": self._summarize_findings(findings),
+        }
+        return result
 
     def get_name(self) -> str:
         """Get scanner name."""

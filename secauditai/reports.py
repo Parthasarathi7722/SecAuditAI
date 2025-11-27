@@ -9,7 +9,10 @@ from pathlib import Path
 import jinja2
 from rich.console import Console
 from rich.table import Table
-import pdfkit
+try:
+    import pdfkit
+except ImportError:  # pragma: no cover - optional dependency
+    pdfkit = None
 
 console = Console()
 
@@ -73,6 +76,10 @@ class ReportGenerator:
         html_path = self.generate_html_report(results, scan_type)
         pdf_path = self._get_report_path(scan_type, "pdf")
         
+        if pdfkit is None:
+            console.print("[yellow]pdfkit is not installed. Returning HTML report instead.[/yellow]")
+            return html_path
+        
         try:
             pdfkit.from_file(html_path, pdf_path)
             return pdf_path
@@ -129,3 +136,23 @@ class ReportGenerator:
             )
             
         console.print(table) 
+
+
+def generate_zero_day_report(
+    code_results: Dict[str, Any],
+    network_results: Dict[str, Any],
+    format: str = "html"
+) -> str:
+    """Produce a lightweight zero-day report used in the test-suite."""
+    if format != "html":
+        raise ValueError("Only HTML formatted zero-day reports are supported.")
+
+    code_section = json.dumps(code_results, indent=2)
+    network_section = json.dumps(network_results, indent=2)
+    return (
+        "<html><body>"
+        "<h1>Zero-Day Detection Report</h1>"
+        f"<h2>Code Analysis</h2><pre>{code_section}</pre>"
+        f"<h2>Network Analysis</h2><pre>{network_section}</pre>"
+        "</body></html>"
+    )

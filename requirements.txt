@@ -77,6 +77,8 @@ numpy>=1.24.0
 # Monitoring and notifications
 watchdog>=3.0.0
 slack-sdk>=3.20.0
+schedule>=1.2.0
+psutil>=5.9.0
 
 # Development
 pre-commit>=3.3.0

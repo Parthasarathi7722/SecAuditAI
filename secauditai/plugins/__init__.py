@@ -1,7 +1,7 @@
 """
 Plugin system for SecAuditAI.
 """
-from typing import Dict, Any, List, Type
+from typing import Dict, Any, List, Type, Optional, Iterable
 from abc import ABC, abstractmethod
 from ..config import ConfigManager
 
@@ -26,8 +26,9 @@ class ScannerPlugin(ABC):
 class PluginManager:
     """Manages scanner plugins."""
     
-    def __init__(self):
-        self.config = ConfigManager().get_config()
+    def __init__(self, config: Optional[Any] = None):
+        # Accept an optional config object to improve integration with other modules
+        self.config = config or ConfigManager().get_config()
         self.scanners: Dict[str, ScannerPlugin] = {}
         self._load_plugins()
 
@@ -51,6 +52,14 @@ class PluginManager:
     def get_plugin(self, name: str) -> Optional[ScannerPlugin]:
         """Get a scanner plugin by name."""
         return self.scanners.get(name)
+
+    def get_scanners(self) -> List[ScannerPlugin]:
+        """Return a list of registered scanner instances."""
+        return list(self.scanners.values())
+
+    def iter_scanners(self) -> Iterable[ScannerPlugin]:
+        """Iterate over registered scanners without extra allocations."""
+        return self.scanners.values()
 
     def list_plugins(self) -> List[Dict[str, str]]:
         """List all available scanner plugins."""

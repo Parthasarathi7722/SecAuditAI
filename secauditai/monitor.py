@@ -8,7 +8,12 @@ import logging
 from typing import Dict, Any, Optional
 from pathlib import Path
 from datetime import datetime
-import schedule
+
+try:
+    import schedule  # type: ignore
+except ImportError:  # pragma: no cover
+    schedule = None  # type: ignore
+
 import requests
 from rich.console import Console
 from rich.panel import Panel
@@ -16,14 +21,17 @@ from rich.progress import Progress
 from .plugins import PluginManager
 from .config import ConfigManager
 from .reports import ReportGenerator
+from .monitoring import SecurityMonitor as _SecurityMonitor
 
 class Monitor:
     """Handles real-time monitoring of security aspects."""
     
-    def __init__(self, config: Dict[str, Any]):
-        self.config = config
-        self.plugin_manager = PluginManager(config)
-        self.report_generator = ReportGenerator(config)
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
+        config_manager = ConfigManager()
+        self.config = config or config_manager.get_config().dict()
+        self.plugin_manager = PluginManager(config_manager.get_config())
+        output_dir = self.config.get('scanner', {}).get('output_dir', "~/.secauditai/results")
+        self.report_generator = ReportGenerator(output_dir=output_dir)
         self.console = Console()
         self.monitoring_config = config.get('monitoring', {})
         self.interval = self.monitoring_config.get('interval', 300)  # Default 5 minutes
@@ -46,6 +54,8 @@ class Monitor:
 
     def start_monitoring(self, target: str) -> None:
         """Start monitoring the specified target."""
+        if schedule is None:
+            raise RuntimeError("The 'schedule' package is required for monitoring.")
         self.logger.info(f"Starting monitoring for target: {target}")
         self.console.print(Panel(f"Starting monitoring for: {target}", title="SecAuditAI Monitor"))
         
@@ -66,10 +76,13 @@ class Monitor:
         
         with Progress() as progress:
             task = progress.add_task("[cyan]Scanning...", total=100)
-            
+            scanners = self.plugin_manager.get_scanners()
+            if not scanners:
+                self.logger.warning("No scanners are registered with the plugin manager.")
+                return
             # Run all available scanners
             results = {}
-            for scanner in self.plugin_manager.get_scanners():
+            for scanner in scanners:
                 scanner_name = scanner.__class__.__name__
                 progress.update(task, description=f"[cyan]Running {scanner_name}...")
                 
@@ -81,13 +94,14 @@ class Monitor:
                     if self._has_high_severity_findings(scan_results):
                         self._send_alert(scanner_name, scan_results)
                     
-                    progress.update(task, advance=100/len(self.plugin_manager.get_scanners()))
+                    progress.update(task, advance=100 / max(len(scanners), 1))
                 except Exception as e:
                     self.logger.error(f"Error running {scanner_name}: {str(e)}")
-                    progress.update(task, advance=100/len(self.plugin_manager.get_scanners()))
+                    progress.update(task, advance=100 / max(len(scanners), 1))
         
         # Generate report
-        report_id = self.report_generator.generate_report(results)
+        report_format = self.monitoring_config.get('report_format', 'json')
+        report_id = self.report_generator.generate_report(results, 'monitoring', report_format)
         self.logger.info(f"Generated report: {report_id}")
 
     def _has_high_severity_findings(self, results: Dict[str, Any]) -> bool:
@@ -172,3 +186,6 @@ class Monitor:
                 
         except Exception as e:
             self.logger.error(f"Error sending Slack alert: {str(e)}") 
+
+
+SecurityMonitor = _SecurityMonitor
