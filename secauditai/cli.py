@@ -1,6 +1,7 @@
 """
 Main CLI module for SecAuditAI.
 """
+import sec_requests
 import click
 from rich.console import Console
 from rich.panel import Panel
