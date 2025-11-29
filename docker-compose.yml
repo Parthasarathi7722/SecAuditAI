@@ -5,17 +5,28 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: secauditai:latest
+    container_name: secauditai
     volumes:
-      - .:/app
+      - ./results:/home/appuser/.secauditai/results
+      - ./workspace:/workspace:ro  # Mount workspace for scanning
     environment:
       - PYTHONPATH=/app
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
-      - AZURE_CLIENT_ID=${AZURE_CLIENT_ID}
-      - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}
-      - AZURE_TENANT_ID=${AZURE_TENANT_ID}
-      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
-    ports:
-      - "8000:8000"  # For FastAPI
-    command: python -m pytest tests/ 
+      - PYTHONUNBUFFERED=1
+      # Cloud credentials (optional - set as needed)
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
+      - AZURE_CLIENT_ID=${AZURE_CLIENT_ID:-}
+      - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET:-}
+      - AZURE_TENANT_ID=${AZURE_TENANT_ID:-}
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS:-}
+    # Uncomment if running API server
+    # ports:
+    #   - "8000:8000"
+    # Default command - show help
+    command: python -m secauditai.cli --help
+    # Example: Scan code in workspace
+    # command: python -m secauditai.cli scan code --path /workspace
+    user: appuser
+    working_dir: /app 

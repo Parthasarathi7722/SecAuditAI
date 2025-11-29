@@ -1,0 +1,82 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info
+dist
+build
+.eggs
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+python/
+venv-python
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache
+.coverage
+htmlcov
+.tox
+.hypothesis
+
+# Documentation
+docs/_build
+docs/.doctrees
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+*.db
+*.sqlite3
+.cache
+results/
+*.pdf
+*.html
+*.json
+!requirements.txt
+!setup.py
+!pyproject.toml
+
+# Test files
+tests/
+test_*.py
+
+# Examples (optional - remove if you want them in the image)
+docs/examples/
+
+# Scripts (optional - remove if you want them in the image)
+scripts/
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+

@@ -94,6 +94,16 @@ class SBOMScanner(ScannerPlugin):
                         "message": vuln.get("description", "Known vulnerability detected"),
                         "severity": vuln.get("severity", "high").lower(),
                         "vulnerability_id": vuln.get("id"),
+                        "recommendation": f"Update {package} to a secure version or apply security patches",
+                        "evidence": {
+                            "package": package,
+                            "version": version,
+                            "vulnerability_details": vuln,
+                            "cve_id": vuln.get("id"),
+                            "published_date": vuln.get("published_date"),
+                            "affected_versions": vuln.get("affected_versions", []),
+                            "cvss_score": vuln.get("cvss_score")
+                        }
                     }
                 )
         return findings
@@ -127,6 +137,13 @@ class SBOMScanner(ScannerPlugin):
                         "message": f"Outdated dependency. Latest available version is {latest}",
                         "severity": "medium",
                         "recommendation": f"Upgrade {package} to {latest}",
+                        "evidence": {
+                            "package": package,
+                            "current_version": version,
+                            "latest_version": latest,
+                            "package_info": resp_json.get("info", {}),
+                            "release_date": resp_json.get("releases", {}).get(latest, [{}])[0].get("upload_time") if resp_json.get("releases", {}).get(latest) else None
+                        }
                     }
                 )
         return findings
@@ -147,6 +164,14 @@ class SBOMScanner(ScannerPlugin):
                             "status": "failed",
                             "message": f"Restricted license detected: {license_id}",
                             "severity": "medium",
+                            "recommendation": f"Review license compliance requirements for {license_id} license",
+                            "evidence": {
+                                "package": artifact.get('name'),
+                                "version": artifact.get('version'),
+                                "license": license_id,
+                                "license_type": "restricted",
+                                "all_licenses": licenses
+                            }
                         }
                     )
                 elif license_id not in allowed:
@@ -154,11 +179,20 @@ class SBOMScanner(ScannerPlugin):
                         {
                             "check_id": "sbom-003",
                             "resource": f"{artifact.get('name')}@{artifact.get('version')}",
-                            "status": "warning",
-                            "message": f"Unknown license detected: {license_id}",
-                            "severity": "low",
+                            "status": "failed",
+                            "message": f"Unknown or unapproved license: {license_id}",
+                            "severity": "medium",
+                            "recommendation": f"Review and approve {license_id} license for use",
+                            "evidence": {
+                                "package": artifact.get('name'),
+                                "version": artifact.get('version'),
+                                "license": license_id,
+                                "license_type": "unknown",
+                                "all_licenses": licenses
+                            }
                         }
                     )
+                # Allowed licenses pass without findings
         return findings
 
     def scan(self, target: str, **kwargs) -> Dict[str, Any]:

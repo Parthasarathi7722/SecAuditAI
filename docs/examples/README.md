@@ -1,31 +1,32 @@
 # SecAuditAI Examples
 
-This directory contains example scripts demonstrating how to use SecAuditAI's features.
+This directory contains example scripts demonstrating how to use SecAuditAI's security scanning features.
 
-## Basic Usage
+## Code Scanning Examples
 
-`basic_usage.py` demonstrates the fundamental features of SecAuditAI:
-- Initialization of core components
-- Basic credential management
-- Simple access control
-- Basic data protection
-- Simple logging
-- Basic configuration management
-- Basic security scanning and reporting
+- `code_scanning.py` - Scan source code for security vulnerabilities
+- `basic_scan.py` - Basic code scanning workflow
+- `custom_rules.py` - Using custom security rules
 
-## Advanced Usage
+## Cloud Scanning Examples
 
-`advanced_usage.py` demonstrates more complex use cases:
-- Advanced configuration options
-- Multiple credential backends
-- Custom roles and permissions
-- Multiple encryption algorithms
-- Structured logging with multiple handlers
-- Environment variable configuration
-- Bulk operations
-- Async operations
-- Continuous monitoring
-- Advanced compliance reporting
+- `cloud_scanning.py` - Scan cloud infrastructure
+- `aws_scanner.py` - AWS-specific scanning
+- `azure_scanner.py` - Azure-specific scanning
+- `gcp_scanner.py` - GCP-specific scanning
+- `multi_cloud_scanning.py` - Multi-cloud scanning
+- `hybrid_cloud_scanning.py` - Hybrid cloud environments
+
+## Container and Infrastructure Examples
+
+- `container_scanning.py` - Container security scanning
+- `image_security_scanning.py` - Container image scanning
+- `iac_scanning.py` - Infrastructure as Code scanning
+- `iac_security_scanning.py` - IaC security analysis
+
+## SBOM and Dependency Examples
+
+- `sbom_generation.py` - Generate and analyze Software Bill of Materials
 
 ## Running the Examples
 

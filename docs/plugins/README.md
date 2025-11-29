@@ -1,29 +1,48 @@
 # Plugin Development Guide
 
-This guide explains how to develop and use plugins with SecAuditAI.
+This guide explains how to develop scanner plugins for SecAuditAI.
 
-## Plugin Types
+## Scanner Plugin Interface
 
-### 1. Scanner Plugins
+All scanner plugins must implement the `ScannerPlugin` interface:
 
 ```python
-from secauditai.plugins.base import BaseScanner
+from secauditai.plugins import ScannerPlugin
 
-class CustomScanner(BaseScanner):
-    def __init__(self, config):
-        super().__init__(config)
-        self.name = "custom_scanner"
-        self.version = "1.0.0"
+class CustomScanner(ScannerPlugin):
+    def __init__(self):
+        self.checks = self._load_checks()
     
-    def scan(self, target, **kwargs):
-        # Implement scan logic
+    def scan(self, target: str, **kwargs) -> Dict[str, Any]:
+        """Perform security scan and return findings with evidence."""
         findings = []
         # ... scanning logic ...
-        return findings
+        # Each finding should include evidence
+        findings.append({
+            "check_id": "custom-001",
+            "resource": "resource_identifier",
+            "status": "failed",
+            "message": "Description of the issue",
+            "severity": "high",
+            "recommendation": "How to fix the issue",
+            "evidence": {
+                # Detailed evidence supporting the finding
+            }
+        })
+        return {
+            "scanner": self.get_name(),
+            "target": target,
+            "findings": findings,
+            "summary": self._summarize_findings(findings)
+        }
     
-    def validate_config(self):
-        # Implement config validation
-        pass
+    def get_name(self) -> str:
+        """Return scanner name."""
+        return "custom"
+    
+    def get_description(self) -> str:
+        """Return scanner description."""
+        return "Custom security scanner"
 ```
 
 ### 2. Analyzer Plugins

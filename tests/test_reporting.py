@@ -2,7 +2,7 @@ import unittest
 import tempfile
 import os
 from pathlib import Path
-from secauditai.reporting import ReportGenerator
+from secauditai.reports import ReportGenerator
 
 class TestReporting(unittest.TestCase):
     def setUp(self):

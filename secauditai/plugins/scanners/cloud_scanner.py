@@ -72,7 +72,20 @@ class CloudScanner(BaseScanner):
                 "description": check.get("description"),
                 "remediation": check.get("remediation"),
                 "resource_id": check.get("resource_id"),
-                "region": check.get("region")
+                "region": check.get("region"),
+                "evidence": {
+                    "check_id": check.get("check_id"),
+                    "resource_id": check.get("resource_id"),
+                    "region": check.get("region"),
+                    "account_id": check.get("account_id"),
+                    "check_output": check.get("check_output"),
+                    "timestamp": check.get("timestamp"),
+                    "compliance": check.get("compliance"),
+                    "risk": check.get("risk"),
+                    "service_name": check.get("service_name"),
+                    "resource_tags": check.get("resource_tags", {}),
+                    "prowler_command": check.get("prowler_command")
+                }
             }
             findings.append(finding)
         return findings

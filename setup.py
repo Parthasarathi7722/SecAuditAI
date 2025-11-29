@@ -47,10 +47,7 @@ setup(
         "torch>=2.0.0",
         "scikit-learn>=1.0.0",
         "tree-sitter>=0.20.0",
-        "syft>=0.60.0",
-        "grype>=0.60.0",
         "jinja2>=3.0.0",
-        "pdfkit>=1.0.0",
         "slack-sdk>=3.20.0",
     ],
     extras_require={
@@ -63,11 +60,14 @@ setup(
             "isort>=5.0.0",
         ],
         "security": [
-            "prowler>=3.0.0",
+            # Note: prowler, openscap, inspec are CLI tools, not Python packages
+            # Install them separately: pip install prowler-cloud (for Python wrapper)
+            # Or install CLI: https://github.com/prowler-cloud/prowler
             "cloud-custodian>=0.9.0",
-            "dependency-check>=8.0.0",
-            "openscap>=1.3.0",
-            "inspec>=5.0.0",
+        ],
+        "pdf": [
+            # PDF report generation (requires wkhtmltopdf system package)
+            "pdfkit>=1.0.0",
         ],
     },
     entry_points={

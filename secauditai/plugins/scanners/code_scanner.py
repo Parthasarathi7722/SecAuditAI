@@ -80,6 +80,15 @@ class CodeScanner(ScannerPlugin):
         """Return a stable resource string for a finding."""
         return str(file_path or Path("<memory>"))
 
+    @staticmethod
+    def _get_context(code: str, match: Match[str], context_lines: int = 3) -> List[str]:
+        """Get surrounding context lines for a match."""
+        lines = code.split('\n')
+        match_line = code.count("\n", 0, match.start())
+        start = max(0, match_line - context_lines)
+        end = min(len(lines), match_line + context_lines + 1)
+        return [f"{i+1}: {line}" for i, line in enumerate(lines[start:end], start=start)]
+
     def _check_hardcoded_secrets(
         self, code: str, language: str, file_path: Optional[Path] = None
     ) -> List[Dict[str, Any]]:
@@ -103,14 +112,23 @@ class CodeScanner(ScannerPlugin):
         for pattern in secret_patterns:
             matches = re.finditer(pattern, code, re.IGNORECASE)
             for match in matches:
+                line_num = self._line_number(code, match)
+                line_content = code.split('\n')[line_num - 1] if line_num > 0 else ""
                 findings.append(
                     {
                         "check_id": "code-001",
-                        "resource": f"{resource}:{self._line_number(code, match)}",
+                        "resource": f"{resource}:{line_num}",
                         "status": "failed",
                         "message": "Potential hardcoded secret found",
                         "severity": "high",
                         "recommendation": "Use environment variables or secure secret management",
+                        "evidence": {
+                            "line_number": line_num,
+                            "line_content": line_content.strip(),
+                            "matched_pattern": pattern,
+                            "matched_text": match.group(0),
+                            "context": self._get_context(code, match, 3)
+                        }
                     }
                 )
 
@@ -137,14 +155,23 @@ class CodeScanner(ScannerPlugin):
         for pattern in sql_patterns:
             matches = re.finditer(pattern, code, re.IGNORECASE)
             for match in matches:
+                line_num = self._line_number(code, match)
+                line_content = code.split('\n')[line_num - 1] if line_num > 0 else ""
                 findings.append(
                     {
                         "check_id": "code-002",
-                        "resource": f"{resource}:{self._line_number(code, match)}",
+                        "resource": f"{resource}:{line_num}",
                         "status": "failed",
                         "message": "Potential SQL injection vulnerability",
                         "severity": "high",
                         "recommendation": "Use parameterized queries or prepared statements",
+                        "evidence": {
+                            "line_number": line_num,
+                            "line_content": line_content.strip(),
+                            "matched_pattern": pattern,
+                            "matched_text": match.group(0),
+                            "context": self._get_context(code, match, 3)
+                        }
                     }
                 )
 
@@ -171,14 +198,23 @@ class CodeScanner(ScannerPlugin):
         for pattern in xss_patterns:
             matches = re.finditer(pattern, code, re.IGNORECASE)
             for match in matches:
+                line_num = self._line_number(code, match)
+                line_content = code.split('\n')[line_num - 1] if line_num > 0 else ""
                 findings.append(
                     {
                         "check_id": "code-003",
-                        "resource": f"{resource}:{self._line_number(code, match)}",
+                        "resource": f"{resource}:{line_num}",
                         "status": "failed",
                         "message": "Potential XSS vulnerability",
                         "severity": "high",
                         "recommendation": "Use proper output encoding and sanitization",
+                        "evidence": {
+                            "line_number": line_num,
+                            "line_content": line_content.strip(),
+                            "matched_pattern": pattern,
+                            "matched_text": match.group(0),
+                            "context": self._get_context(code, match, 3)
+                        }
                     }
                 )
 
@@ -204,14 +240,23 @@ class CodeScanner(ScannerPlugin):
         for pattern in access_patterns:
             matches = re.finditer(pattern, code, re.IGNORECASE)
             for match in matches:
+                line_num = self._line_number(code, match)
+                line_content = code.split('\n')[line_num - 1] if line_num > 0 else ""
                 findings.append(
                     {
                         "check_id": "code-004",
-                        "resource": f"{resource}:{self._line_number(code, match)}",
+                        "resource": f"{resource}:{line_num}",
                         "status": "failed",
                         "message": "Potential broken access control vulnerability",
                         "severity": "high",
                         "recommendation": "Implement proper access control checks",
+                        "evidence": {
+                            "line_number": line_num,
+                            "line_content": line_content.strip(),
+                            "matched_pattern": pattern,
+                            "matched_text": match.group(0),
+                            "context": self._get_context(code, match, 3)
+                        }
                     }
                 )
 
@@ -235,14 +280,23 @@ class CodeScanner(ScannerPlugin):
         for pattern in csrf_patterns:
             matches = re.finditer(pattern, code, re.IGNORECASE)
             for match in matches:
+                line_num = self._line_number(code, match)
+                line_content = code.split('\n')[line_num - 1] if line_num > 0 else ""
                 findings.append(
                     {
                         "check_id": "code-005",
-                        "resource": f"{resource}:{self._line_number(code, match)}",
+                        "resource": f"{resource}:{line_num}",
                         "status": "failed",
                         "message": "CSRF protection disabled",
                         "severity": "high",
                         "recommendation": "Enable CSRF protection",
+                        "evidence": {
+                            "line_number": line_num,
+                            "line_content": line_content.strip(),
+                            "matched_pattern": pattern,
+                            "matched_text": match.group(0),
+                            "context": self._get_context(code, match, 3)
+                        }
                     }
                 )
 
@@ -268,14 +322,23 @@ class CodeScanner(ScannerPlugin):
         for pattern in file_patterns:
             matches = re.finditer(pattern, code, re.IGNORECASE)
             for match in matches:
+                line_num = self._line_number(code, match)
+                line_content = code.split('\n')[line_num - 1] if line_num > 0 else ""
                 findings.append(
                     {
                         "check_id": "code-006",
-                        "resource": f"{resource}:{self._line_number(code, match)}",
+                        "resource": f"{resource}:{line_num}",
                         "status": "failed",
                         "message": "Potential file inclusion vulnerability",
                         "severity": "high",
                         "recommendation": "Validate file paths and use allowlists",
+                        "evidence": {
+                            "line_number": line_num,
+                            "line_content": line_content.strip(),
+                            "matched_pattern": pattern,
+                            "matched_text": match.group(0),
+                            "context": self._get_context(code, match, 3)
+                        }
                     }
                 )
 

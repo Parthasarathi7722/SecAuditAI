@@ -47,13 +47,22 @@ class AWSScanner(ScannerPlugin):
             for bucket in buckets:
                 try:
                     acl = s3.get_bucket_acl(Bucket=bucket['Name'])
-                    if any(grant['Grantee'].get('URI') == 'http://acs.amazonaws.com/groups/global/AllUsers' 
-                          for grant in acl['Grants']):
+                    public_grants = [grant for grant in acl['Grants'] 
+                                   if grant['Grantee'].get('URI') == 'http://acs.amazonaws.com/groups/global/AllUsers']
+                    if public_grants:
                         findings.append({
                             "check_id": "aws-001",
                             "resource": f"s3://{bucket['Name']}",
                             "status": "failed",
-                            "message": "Bucket has public access enabled"
+                            "message": "Bucket has public access enabled",
+                            "severity": "high",
+                            "recommendation": "Disable public access and use IAM policies for access control",
+                            "evidence": {
+                                "bucket_name": bucket['Name'],
+                                "public_grants": public_grants,
+                                "acl_configuration": acl,
+                                "creation_date": bucket.get('CreationDate', '').isoformat() if bucket.get('CreationDate') else None
+                            }
                         })
                 except Exception as e:
                     findings.append({
@@ -88,7 +97,17 @@ class AWSScanner(ScannerPlugin):
                                     "check_id": "aws-002",
                                     "resource": f"sg-{sg['GroupId']}",
                                     "status": "failed",
-                                    "message": "Security group allows access from anywhere (0.0.0.0/0)"
+                                    "message": "Security group allows access from anywhere (0.0.0.0/0)",
+                                    "severity": "medium",
+                                    "recommendation": "Restrict security group rules to specific IP ranges or VPC CIDR blocks",
+                                    "evidence": {
+                                        "security_group_id": sg['GroupId'],
+                                        "security_group_name": sg.get('GroupName', ''),
+                                        "permission": permission,
+                                        "open_cidr": ip_range['CidrIp'],
+                                        "protocol": permission.get('IpProtocol', ''),
+                                        "ports": [p.get('FromPort', '') for p in permission.get('IpRanges', [])]
+                                    }
                                 })
         except Exception as e:
             findings.append({
